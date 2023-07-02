@@ -1,18 +1,57 @@
 #include <Arduino.h>
+#define led 13   // led on pin A13
+#define button 8 // button on pin IN 8
 
-// put function declarations here:
-int myFunction(int, int);
-
-void setup() {
+void setup()
+{
   // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+
+  // led
+  pinMode(led, OUTPUT);
+
+  // button
+  pinMode(button, INPUT_PULLUP);
+
+  // Start the serial monitor
+  Serial.begin(9600);
 }
 
-void loop() {
+void loop()
+{
+
+  // Test Loop
+  // digitalWrite(led,HIGH);
+  // delay(1000);
+
+  // digitalWrite(led,LOW);
+  // delay(1000);
+
+
   // put your main code here, to run repeatedly:
-}
+  if (digitalRead(button) == true)
+  {
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+    // Print
+    Serial.print("button true\n");
+
+    // set led to high
+    digitalWrite(led, HIGH);
+
+    // set delay
+    delay(6000);
+  }
+  else
+  {
+
+    // Print
+    Serial.print("button false\n");
+
+    // set led to low
+    digitalWrite(led, LOW);
+
+    // set delay
+    delay(3000);
+  }
+  // Print
+  // Serial.print("loop completed\n");
 }
