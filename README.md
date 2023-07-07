@@ -19,5 +19,5 @@ Currently the Mega2560 is in charge. But for later on it could be change to a Na
 To finde out if the approach, to recycle the devices of an old cordless screwdrive I executed a simple POC :-).
 
 ![cordless-screwdrive_AdobeExpress](https://github.com/Aladim/sunshade/assets/16881452/954ea077-bf9f-4f55-88f1-5e52f959c00d)
-Note: I converted the video from .mp4 to .gif with https://www.adobe.com/express/feature/video/convert/mp4-to-gif
 
+Note: I converted the video from .mp4 to .gif with https://www.adobe.com/express/feature/video/convert/mp4-to-gif
