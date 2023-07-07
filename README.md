@@ -11,14 +11,23 @@ Both devices are recycled from an old cordless screwdrive.
 <img src="https://github.com/Aladim/sunshade/blob/main/doc/recycled-cordless-screwdrive.jpeg" height="200" title="welding expert">
 
 ### Motor Driver
-The h-bridge module xxx drives the motor.
+The h-bridge modul drives the motor.
+
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/recycled-cordless-screwdrive.jpeg" height="200" title="welding expert">
+
 ### Interface
 For the controll interface the IR modul zzz is set up.
+
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/recycled-cordless-screwdrive.jpeg" height="200" title="welding expert">
+
 I still have a small doubt if it is working while the sunshade is closed, 
 but I will figured it out later.
 ### Single-board microcontroller
 Like mention befor a arduino computing-platform is used for the program processing and I/O controlling job.
 Currently the Mega2560 is in charge. But for later on it could be change to a Nano variant.
+
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/recycled-cordless-screwdrive.jpeg" height="200" title="welding expert">
+
 ## POC
 To finde out if the approach, to recycle the devices of an old cordless screwdrive for I executed a simple POC :-).
 
