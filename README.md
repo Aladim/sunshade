@@ -4,7 +4,8 @@ The sunshade project is a program for the arduino platform.
 The main purpose of this program is to open and close our big sunshade.
 ## System Desciption
 ### Motor and Gear
-The mechanicle work to open and close the sunshade comes from a dc motor which is directly conected to a gear. Both devices are recycled from an old cordless screwdrive.
+The mechanicle work to open and close the sunshade comes from a dc motor which is directly conected to a gear.
+Both devices are recycled from an old cordless screwdrive.
 ### Motor Driver
 The h-bridge module xxx drives the motor.
 ### Interface
