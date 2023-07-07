@@ -2,23 +2,26 @@
 ## Introduction
 The project sunshade is a program for the [arduino](https://de.wikipedia.org/wiki/Arduino_(Plattform)) computing-platform.
 The main purpose of this program is to open and close a big sunshade.
+
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/sunshade.jpg" height="200" title="sunshade">
+
 ## System Desciption
 ### Motor and Transmission
 The the required mechanical work to open and close the sunshade comes from a dc motor.
 This dc motor is directly conected to a transmission.
 Both devices are recycled from an old cordless screwdrive.
 
-<img src="https://github.com/Aladim/sunshade/blob/main/doc/recycled-cordless-screwdrive.jpeg" height="200" title="welding expert">
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/recycled-cordless-screwdrive.jpeg" height="200" title="recycled cordless screwdrive">
 
 ### Motor Driver
 The h-bridge modul drives the motor.
 
-<img src="https://github.com/Aladim/sunshade/blob/main/doc/h-bridge-modul.jpeg" height="200" title="welding expert">
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/h-bridge-modul.jpeg" height="200" title="h-bridge modul">
 
 ### Interface
-For the controll interface a IR modul is set up.
+For the controll interface a IR (infrared) modul is set up.
 
-<img src="https://github.com/Aladim/sunshade/blob/main/doc/ir-modul.jpeg" height="200" title="welding expert">
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/ir-modul.jpeg" height="200" title="ir-modul">
 
 I still have a small doubt if it is working while the sunshade is closed, 
 but I will figured it out later.
@@ -26,7 +29,7 @@ but I will figured it out later.
 Like mention befor a arduino computing-platform is used for the program processing and I/O controlling job.
 Currently the Mega 2560 is in charge. But for later on it could be change to a Nano variant.
 
-<img src="https://github.com/Aladim/sunshade/blob/main/doc/mega-2560.jpeg" height="200" title="welding expert">
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/mega-2560.jpeg" height="200" title="mega 2560">
 
 ### Housing and Mounting Frame
 The housign and mounting frame work is still an opne topic.
