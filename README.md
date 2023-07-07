@@ -18,7 +18,7 @@ The h-bridge modul drives the motor.
 ### Interface
 For the controll interface a IR modul is set up.
 
-<img src="https://github.com/Aladim/sunshade/blob/main/doc/recycled-cordless-screwdrive.jpeg" height="200" title="welding expert">
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/ir-modul.jpeg" height="200" title="welding expert">
 
 I still have a small doubt if it is working while the sunshade is closed, 
 but I will figured it out later.
