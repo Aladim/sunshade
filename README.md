@@ -1,6 +1,6 @@
 # sunshade [WIP]
 ## Introduction
-The sunshade project is a program for the [arduino](https://de.wikipedia.org/wiki/Arduino_(Plattform)) computing-platform.
+The project sunshade is a program for the [arduino](https://de.wikipedia.org/wiki/Arduino_(Plattform)) computing-platform.
 The main purpose of this program is to open and close our big sunshade.
 ## System Desciption
 ### Motor and Transmission
