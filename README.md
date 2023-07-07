@@ -1,7 +1,7 @@
 # sunshade [WIP]
 ## Introduction
 The project sunshade is a program for the [arduino](https://de.wikipedia.org/wiki/Arduino_(Plattform)) computing-platform.
-The main purpose of this program is to open and close our big sunshade.
+The main purpose of this program is to open and close a big sunshade.
 ## System Desciption
 ### Motor and Transmission
 The the required mechanical work to open and close the sunshade comes from a dc motor.
