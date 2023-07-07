@@ -24,9 +24,9 @@ I still have a small doubt if it is working while the sunshade is closed,
 but I will figured it out later.
 ### Single-board microcontroller
 Like mention befor a arduino computing-platform is used for the program processing and I/O controlling job.
-Currently the Mega2560 is in charge. But for later on it could be change to a Nano variant.
+Currently the Mega 2560 is in charge. But for later on it could be change to a Nano variant.
 
-<img src="https://github.com/Aladim/sunshade/blob/main/doc/recycled-cordless-screwdrive.jpeg" height="200" title="welding expert">
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/mega-2560.jpeg" height="200" title="welding expert">
 
 ## POC
 To finde out if the approach, to recycle the devices of an old cordless screwdrive for I executed a simple POC :-).
