@@ -1,10 +1,11 @@
 # sunshade [WIP]
 ## Introduction
-The sunshade project is a program for the arduino platform.
+The sunshade project is a program for the [arduino](https://de.wikipedia.org/wiki/Arduino_(Plattform)) computing-platform.
 The main purpose of this program is to open and close our big sunshade.
 ## System Desciption
-### Motor and Gear
-The mechanicle work to open and close the sunshade comes from a dc motor which is directly conected to a gear.
+### Motor and Transmission
+The the required mechanical work to open and close the sunshade comes from a dc motor.
+This dc motor is directly conected to a transmission.
 Both devices are recycled from an old cordless screwdrive.
 ### Motor Driver
 The h-bridge module xxx drives the motor.
@@ -16,7 +17,7 @@ but I will figured it out later.
 Like mention befor a arduino platform is used for the micro controller job.
 Currently the Mega2560 is in charge. But for later on it could be change to a Nano variant.
 ## POC
-To finde out if the approach, to recycle the devices of an old cordless screwdrive I executed a simple POC :-).
+To finde out if the approach, to recycle the devices of an old cordless screwdrive for I executed a simple POC :-).
 
 ![cordless-screwdrive_AdobeExpress](https://github.com/Aladim/sunshade/assets/16881452/954ea077-bf9f-4f55-88f1-5e52f959c00d)
 
