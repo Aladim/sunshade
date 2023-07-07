@@ -13,8 +13,8 @@ The h-bridge module xxx drives the motor.
 For the controll interface the IR modul zzz is set up.
 I still have a small doubt if it is working while the sunshade is closed, 
 but I will figured it out later.
-### Micro Controller
-Like mention befor a arduino platform is used for the micro controller job.
+### Single-board microcontroller
+Like mention befor a arduino computing-platform is used for the program processing and I/O controlling job.
 Currently the Mega2560 is in charge. But for later on it could be change to a Nano variant.
 ## POC
 To finde out if the approach, to recycle the devices of an old cordless screwdrive for I executed a simple POC :-).
