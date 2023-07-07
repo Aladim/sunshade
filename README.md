@@ -7,7 +7,7 @@ The main purpose of this program is to open and close a big sunshade.
 
 ## System Desciption
 ### Motor and Transmission
-The the required mechanical work to open and close the sunshade comes from a dc motor.
+The required mechanical work to open and close the sunshade comes from a dc motor.
 This dc motor is directly conected to a transmission.
 Both devices are recycled from an old cordless screwdrive.
 
