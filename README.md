@@ -27,4 +27,5 @@ Note: I converted the video from .mp4 to .gif with https://www.adobe.com/express
 The housign and mounting frame work is still an opne topic.
 ### Welding Work
 But we are allready happy to announce that we were able to win an welding expert for this project.
-![welding-expert](https://github.com/Aladim/sunshade/assets/16881452/0bc87ee8-0de3-4f12-9a8e-515dbb947286)
+![welding-expert](https://github.com/Aladim/sunshade/blob/main/doc/welding-expert.jpg)
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/welding-expert.jpg" width="400" height="600">
