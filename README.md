@@ -1,4 +1,4 @@
-# sunshade
+# sunshade [WIP]
 ## Introduction
 The sunshade project is a program for the arduino platform.
 The main purpose of this program is to open and close our big sunshade.
