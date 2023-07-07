@@ -25,7 +25,7 @@ For the controll interface a IR (infrared) modul is set up.
 
 I still have a small doubt if it is working while the sunshade is closed, 
 but I will figured it out later.
-### Single-board microcontroller
+### Single Bard Microcontroller
 Like mention befor a arduino computing-platform is used for the program processing and I/O controlling job.
 Currently the Mega 2560 is in charge. But for later on it could be change to a Nano variant.
 
