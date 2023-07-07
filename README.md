@@ -15,3 +15,6 @@ but I will figured it out later.
 ### Micro Controller
 Like mention befor a arduino platform is used for the micro controller job.
 Currently the Mega2560 is in charge. But for later on it could be change to a Nano variant.
+## POC
+To finde out if the approach, to recycle the devices of an old cordless screwdrive I executed a simple POC :-).
+
