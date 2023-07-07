@@ -28,16 +28,16 @@ Currently the Mega 2560 is in charge. But for later on it could be change to a N
 
 <img src="https://github.com/Aladim/sunshade/blob/main/doc/mega-2560.jpeg" height="200" title="welding expert">
 
+### Housing and Mounting Frame
+The housign and mounting frame work is still an opne topic.
+#### Welding Work
+But we are allready happy to announce that we were able to win an welding expert for this project.
+
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/welding-expert.png" title="welding expert">
+
 ## POC
 To finde out if the approach, to recycle the devices of an old cordless screwdrive for I executed a simple POC :-).
 
 ![cordless-screwdrive_AdobeExpress](https://github.com/Aladim/sunshade/blob/main/doc/cordless-screwdrive.gif)
 
 Note: I converted the video from .mp4 to .gif with https://www.adobe.com/express/feature/video/convert/mp4-to-gif
-
-## Housing and Mounting Frame
-The housign and mounting frame work is still an opne topic.
-### Welding Work
-But we are allready happy to announce that we were able to win an welding expert for this project.
-
-<img src="https://github.com/Aladim/sunshade/blob/main/doc/welding-expert.png" title="welding expert">
