@@ -13,7 +13,7 @@ Both devices are recycled from an old cordless screwdrive.
 ### Motor Driver
 The h-bridge modul drives the motor.
 
-<img src="https://github.com/Aladim/sunshade/blob/main/doc/recycled-cordless-screwdrive.jpeg" height="200" title="welding expert">
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/h-bridge-modul.jpeg" height="200" title="welding expert">
 
 ### Interface
 For the controll interface the IR modul zzz is set up.
