@@ -32,7 +32,7 @@ Currently the Mega 2560 is in charge. But for later on it could be change to a N
 <img src="https://github.com/Aladim/sunshade/blob/main/doc/mega-2560.jpeg" height="200" title="mega 2560">
 
 ### Housing and Mounting Frame
-* For the electronics a universal housing of aluminum is being considered.
+* For the electronic assembly a universal aluminum housing is being considered.
 * How to mount the complete assembly to the sunshade is currently being explored.
 #### Welding Work
 But we are allready happy to announce that we were able to win an welding expert for this project.
