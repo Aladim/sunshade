@@ -49,4 +49,4 @@ Note: I converted the video from .mp4 to .gif with https://www.adobe.com/express
 ## Software Architecture
 ### Use Case Diagram
 
-<img src="https://github.com/Aladim/sunshade/blob/main/doc/use-case-diagram.png" title="use case diagram">
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/use-case-diagram.png" height="400" title="use case diagram">
