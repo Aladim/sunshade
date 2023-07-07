@@ -22,3 +22,9 @@ To finde out if the approach, to recycle the devices of an old cordless screwdri
 ![cordless-screwdrive_AdobeExpress](https://github.com/Aladim/sunshade/assets/16881452/954ea077-bf9f-4f55-88f1-5e52f959c00d)
 
 Note: I converted the video from .mp4 to .gif with https://www.adobe.com/express/feature/video/convert/mp4-to-gif
+
+## Housing and Mounting Frame
+The housign and mounting frame work is still an opne topic.
+### Welding Work
+But we are allready happy to announce that we were able to win an welding expert for this project.
+![welding-expert](https://github.com/Aladim/sunshade/assets/16881452/0bc87ee8-0de3-4f12-9a8e-515dbb947286)
