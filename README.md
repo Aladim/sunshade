@@ -9,6 +9,7 @@ This dc motor is directly conected to a transmission.
 Both devices are recycled from an old cordless screwdrive.
 
 <img src="https://github.com/Aladim/sunshade/blob/main/doc/recycled-cordless-screwdrive.jpeg" height="200" title="welding expert">
+
 ### Motor Driver
 The h-bridge module xxx drives the motor.
 ### Interface
