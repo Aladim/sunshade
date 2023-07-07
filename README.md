@@ -28,4 +28,4 @@ The housign and mounting frame work is still an opne topic.
 ### Welding Work
 But we are allready happy to announce that we were able to win an welding expert for this project.
 
-<img src="https://github.com/Aladim/sunshade/blob/main/doc/welding-expert.jpg" title="welding expert" width="200" height="300">
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/welding-expert.png" title="welding expert">
