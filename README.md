@@ -7,6 +7,7 @@ The main purpose of this program is to open and close our big sunshade.
 The the required mechanical work to open and close the sunshade comes from a dc motor.
 This dc motor is directly conected to a transmission.
 Both devices are recycled from an old cordless screwdrive.
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/welding-expert.png" height="200" title="welding expert">
 ### Motor Driver
 The h-bridge module xxx drives the motor.
 ### Interface
