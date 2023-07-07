@@ -16,7 +16,7 @@ The h-bridge modul drives the motor.
 <img src="https://github.com/Aladim/sunshade/blob/main/doc/h-bridge-modul.jpeg" height="200" title="welding expert">
 
 ### Interface
-For the controll interface the IR modul zzz is set up.
+For the controll interface a IR modul is set up.
 
 <img src="https://github.com/Aladim/sunshade/blob/main/doc/recycled-cordless-screwdrive.jpeg" height="200" title="welding expert">
 
