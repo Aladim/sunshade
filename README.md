@@ -47,7 +47,6 @@ To finde out if the approach, to recycle the devices of an old cordless screwdri
 Note: I converted the video from .mp4 to .gif with https://www.adobe.com/express/feature/video/convert/mp4-to-gif
 
 ## Software Architecture
-
 ### Use Case Diagram
-[WIP]
 
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/use-case-diagram.png" height="200" title="use case diagram">
