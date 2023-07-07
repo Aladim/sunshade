@@ -50,5 +50,5 @@ Note: I converted the video from .mp4 to .gif with https://www.adobe.com/express
 [WIP]
 
 ## Software Architecture
-tbd [WIP]
+[WIP]
 
