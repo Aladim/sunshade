@@ -81,7 +81,7 @@ Current
 ## Software Architecture
 ### Dependencies
 #### Libraries
-* ![Arduino-IRremote](https://github.com/Arduino-IRremote/Arduino-IRremote)
+* [Arduino-IRremote](https://github.com/Arduino-IRremote/Arduino-IRremote)
 ### Use Case Diagram
 
 <img src="https://github.com/Aladim/sunshade/blob/main/doc/use-case-diagram.png" height="450" title="use case diagram">
