@@ -5,7 +5,6 @@
 
 #pragma once                      // ensures that the library is only copied in ONCE into the skecth
 #include <Arduino.h>              // Inlude the Arduino lib
-#include <Aladim_LedController.h> // Inlude the LED lib
 
 // Simple library class to controll the sunshade
 class Aladim_Sunshade
