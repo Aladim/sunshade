@@ -1,7 +1,7 @@
 // Include hardware
 #include <Arduino.h>
 #define DECODE_NEC
-#include <IRremote.hpp> // include the library
+#include <IRremote.hpp> // include the libraries
 /*
  * https://github.com/Arduino-IRremote/Arduino-IRremote/blob/master/examples/SimpleReceiver/SimpleReceiver.ino
  */
