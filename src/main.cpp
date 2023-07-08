@@ -2,21 +2,16 @@
 #include <Arduino.h>
 #define DECODE_NEC
 #include <IRremote.hpp>
-#include <Aladim_LedController.h>
+// #include <Aladim_LedController.h>
+#include <Aladim-Sunshade.h>
 
 /*
  * https://github.com/Arduino-IRremote/Arduino-IRremote/blob/master/examples/SimpleReceiver/SimpleReceiver.ino
  */
 int IR_RECEIVE_PIN = 8; // IR reciver input pin  8
 
-// Create LED object for open sunshade operation
-Aladim_LedController ledOpenSunshade(9);
-
-// Create LED object for the close sunshade operation
-Aladim_LedController ledCloseSunshade(10);
-
-// Create LED object for the stop motor operation
-Aladim_LedController ledStopMotor(11);
+// Create sunshade object
+Aladim_Sunshade sunshade;
 
 // setup
 void setup()
@@ -27,74 +22,16 @@ void setup()
   // Start the serial monitor
   Serial.begin(9600);
 
-  // Start the receiver
+  // Create IR receiver object
   IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
+
+  // Create sunshade object
+  // Aladim_Sunshade sunshade();
 }
 
-// open sunshade
-void openSunshade()
-{
-
-  // Print
-  Serial.print("open sunshade\n");
-
-  // Turn on ledOpenSunshade
-  ledOpenSunshade.turnOn();
-
-  // set delay
-  delay(3000);
-
-  // Trun off ledOpenSunshade
-  ledOpenSunshade.turnOff();
-}
-
-// open sunshade
-void closeSunshade()
-{
-
-  // Print
-  Serial.print("closing sunshade\n");
-
-  // Turn on ledCloseSunshade
-  ledCloseSunshade.turnOn();
-
-  // set delay
-  delay(3000);
-
-  // Trun off ledCloseSunshade
-  ledCloseSunshade.turnOff();
-}
-
-// stop motor
-void stopMotor()
-{
-  // Print
-  Serial.print("stop motor\n");
-
-  // Turn on ledStopMotor
-  ledStopMotor.turnOn();
-
-  // set delay
-  delay(3000);
-
-  // Trun off ledStopMotor
-  ledStopMotor.turnOff();
-}
-
-// turn warning light on
-void warningLightOn()
-{
-  // Print
-  Serial.print("turn on the warning light\n");
-}
-
-// turn warning light off
-void warningLightOff()
-{
-  // Print
-  Serial.print("turn off the warning light\n");
-}
-
+/*
+ * Main Loop
+ */
 void loop()
 {
   // put your main code here, to run repeatedly:
@@ -130,31 +67,31 @@ void loop()
     if (IrReceiver.decodedIRData.command == 0x18)
     {
       // invoke openSunshde
-      openSunshade();
+      sunshade.openSunshade();
     }
     // If button click 'ARROW DOWN' closes the sunschade
     else if (IrReceiver.decodedIRData.command == 0x52)
     {
       // invoke closeSunshade
-      closeSunshade();
+      sunshade.closeSunshade();
     }
     // If button click 'OK' stop the motor
     else if (IrReceiver.decodedIRData.command == 0x1C)
     {
       // invoke stopMotor
-      stopMotor();
+      sunshade.stopMotor();
     }
     // If button click 'ASTERIX' turn on the warning light
     else if (IrReceiver.decodedIRData.command == 0x16)
     {
       // invoke warningLightOn
-      warningLightOn();
+      sunshade.warningLightOn();
     }
     // If button click 'HASHTAG' turn off the warning light
     else if (IrReceiver.decodedIRData.command == 0xD)
     {
       // invoke warningLightOff
-      warningLightOff();
+      sunshade.warningLightOff();
     }
   }
 }
