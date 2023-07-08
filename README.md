@@ -22,7 +22,7 @@ Datasheet: https://www.makershop.de/download/BTS7960-Motor-Driver.pdf
 ### Interface
 For the controll interface a IR (infrared) modul is set up.
 
-<img src="https://github.com/Aladim/sunshade/blob/main/doc/ir-modul.jpeg" height="200" title="ir-modul">
+<img src="https://github.com/Aladim/sunshade/blob/main/doc/img/ir-modul.jpeg" height="200" title="ir-modul">
 
 I still have a small doubt if it is working while the sunshade is closed, 
 but I will figured it out later.
