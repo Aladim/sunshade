@@ -46,6 +46,38 @@ To finde out if the approach, to recycle the devices of an old cordless screwdri
 
 Note: I converted the video from .mp4 to .gif with https://www.adobe.com/express/feature/video/convert/mp4-to-gif
 
+## Electrical Characteristics
+
+### Motor
+
+Motor values when no mechanical resistant is conected - no sunshade
+Voltage 
+11.28 V
+11.27 V
+11.24 V
+Current
+1.70 A
+1.73 A
+1.77 A
+
+Motor "anfahren"
+Voltage 5.00 V
+Current 11.25 A
+
+Motot with sunshade connected
+Voltage
+7.00 V - 8.00 V
+Current
+9.00 A max 9.00 - 10.00 A
+
+Motor stops becouse oc mecanical blocade
+Voltag
+3.10 V
+3.60 V
+Current
+13.00 A - 14.00 A
+
+
 ## Software Architecture
 ### Use Case Diagram
 
