@@ -1,24 +1,26 @@
 // Include hardware
 #include <Arduino.h>
 #define DECODE_NEC
-#include <IRremote.hpp> // include the libraries
+#include <IRremote.hpp>
+#include <Aladim_LedController.h>
+
 /*
  * https://github.com/Arduino-IRremote/Arduino-IRremote/blob/master/examples/SimpleReceiver/SimpleReceiver.ino
  */
-
-#define ledOpenSunshade 9 // led on pin 9
-
-#define ledCloseSunshade 10 // led on pin 10
-
-#define ledStopMotor 11 // led on pin 11
-
 int IR_RECEIVE_PIN = 8; // IR reciver input pin  8
+
+// Create LED object for open sunshade operation
+Aladim_LedController ledOpenSunshade(9);
+
+// Create LED object for the close sunshade operation
+Aladim_LedController ledCloseSunshade(10);
+
+// Create LED object for the stop motor operation
+Aladim_LedController ledStopMotor(11);
 
 // setup
 void setup()
 {
-  // put your setup code here, to run once:
-
   // Just to know which program is running on my Arduino
   Serial.println(F("START " __FILE__ " from " __DATE__ "\r\nUsing library version " VERSION_IRREMOTE));
 
@@ -27,15 +29,6 @@ void setup()
 
   // Start the receiver
   IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
-
-  // Setup mode for open sunshade LED 
-  pinMode(ledOpenSunshade, OUTPUT);
-
-  // Setup mode for close sunshade LED 
-  pinMode(ledCloseSunshade, OUTPUT);
-
-  // Setup mode for stop motor LED 
-  pinMode(ledStopMotor, OUTPUT);
 }
 
 // open sunshade
@@ -46,13 +39,13 @@ void openSunshade()
   Serial.print("open sunshade\n");
 
   // Turn on ledOpenSunshade
-  digitalWrite(ledOpenSunshade, HIGH);
+  ledOpenSunshade.turnOn();
 
   // set delay
   delay(3000);
 
   // Trun off ledOpenSunshade
-  digitalWrite(ledOpenSunshade, LOW);
+  ledOpenSunshade.turnOff();
 }
 
 // open sunshade
@@ -63,13 +56,13 @@ void closeSunshade()
   Serial.print("closing sunshade\n");
 
   // Turn on ledCloseSunshade
-  digitalWrite(ledCloseSunshade, HIGH);
+  ledCloseSunshade.turnOn();
 
   // set delay
   delay(3000);
 
   // Trun off ledCloseSunshade
-  digitalWrite(ledCloseSunshade, LOW);
+  ledCloseSunshade.turnOff();
 }
 
 // stop motor
@@ -79,13 +72,13 @@ void stopMotor()
   Serial.print("stop motor\n");
 
   // Turn on ledStopMotor
-  digitalWrite(ledStopMotor, HIGH);
+  ledStopMotor.turnOn();
 
   // set delay
   delay(3000);
 
   // Trun off ledStopMotor
-  digitalWrite(ledStopMotor, LOW);
+  ledStopMotor.turnOff();
 }
 
 // turn warning light on
