@@ -21,7 +21,7 @@ public: // Declaration of functions: These are the "functions" exposed to the co
     void closeSunshade();
 
     // Stops the motor
-    void stopMotor();
+    void stopSunshade();
 
     // Turns on the warning light
     void warningLightOn();

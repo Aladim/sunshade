@@ -24,9 +24,6 @@ void setup()
 
   // Create IR receiver object
   IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
-
-  // Create sunshade object
-  // Aladim_Sunshade sunshade();
 }
 
 /*
@@ -34,7 +31,6 @@ void setup()
  */
 void loop()
 {
-  // put your main code here, to run repeatedly:
 
   // If IR reciver
   if (IrReceiver.decode())
@@ -79,7 +75,7 @@ void loop()
     else if (IrReceiver.decodedIRData.command == 0x1C)
     {
       // invoke stopMotor
-      sunshade.stopMotor();
+      sunshade.stopSunshade();
     }
     // If button click 'ASTERIX' turn on the warning light
     else if (IrReceiver.decodedIRData.command == 0x16)
