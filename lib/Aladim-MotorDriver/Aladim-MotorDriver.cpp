@@ -1,15 +1,5 @@
 #include <Arduino.h>
 #include "Aladim-MotorDriver.h"
-#include <Aladim_LedController.h>
-
-// Create LED object for open sunshade operation
-Aladim_LedController ledOpenSunshade(9);
-
-// Create LED object for the close sunshade operation
-Aladim_LedController ledCloseSunshade(10);
-
-// Create LED object for the stop motor operation
-Aladim_LedController ledStopSunshade(11);
 
 // Default Constructor
 Aladim_MotorDriver::Aladim_MotorDriver(int rpwmPin, int lpwmPin)
@@ -19,6 +9,10 @@ Aladim_MotorDriver::Aladim_MotorDriver(int rpwmPin, int lpwmPin)
 
     pinMode(RPWM_Output, OUTPUT); // Set the pin number as OUTPUT
     pinMode(LPWM_Output, OUTPUT); // Set the pin number as OUTPUT
+
+    CurrentPWM = 0;   // Current rotation value starts with '0'
+    MaximumPWM = 255; // Maximum rotation value
+    MinimumPWM = 0; // Minimum rotation value
 }
 
 /*
@@ -29,17 +23,9 @@ void Aladim_MotorDriver::motorClockwise()
     // Print
     Serial.print("Turn the motor clocwise\n");
 
-    // LED´s
-    ledOpenSunshade.turnOn();
-    ledCloseSunshade.turnOff();
-    ledStopSunshade.turnOff();
-
-    // reverse rotation
-    int reversePWM = 200;
-
     // Motor
     analogWrite(LPWM_Output, 0);
-    analogWrite(RPWM_Output, reversePWM);
+    accelerateMotor();
 }
 
 /**
@@ -49,19 +35,11 @@ void Aladim_MotorDriver::mototCounterclockwise()
 {
 
     // Print
-    Serial.print("Turn the motor clocwise\n");
-
-    // LED´s
-    ledOpenSunshade.turnOff();
-    ledCloseSunshade.turnOn();
-    ledStopSunshade.turnOff();
-
-    // forward rotation
-    int forwardPWM = 200;
+    Serial.print("Turn the motor counterclocwise\n");
 
     // Motor
-    analogWrite(LPWM_Output, forwardPWM);
     analogWrite(RPWM_Output, 0);
+    slowdownMotor();
 }
 
 /**
@@ -72,12 +50,43 @@ void Aladim_MotorDriver::motorStop()
     // Print
     Serial.print("Stop the motor\n");
 
-    // LED´s
-    ledOpenSunshade.turnOff();
-    ledCloseSunshade.turnOff();
-    ledStopSunshade.turnOn();
-
     // Motor
+    CurrentPWM = 0;
     analogWrite(LPWM_Output, 0);
     analogWrite(RPWM_Output, 0);
+}
+
+/*
+ * Accelerate the motor
+ */
+void Aladim_MotorDriver::accelerateMotor()
+{
+    // Increase current PWM value
+    for (CurrentPWM; CurrentPWM < MaximumPWM + 1; CurrentPWM++)
+    {
+
+        // Write new value to output
+        analogWrite(RPWM_Output, CurrentPWM);
+
+        // Print
+        Serial.println((String) "Max rotation value: " + CurrentPWM);
+    }
+}
+
+/*
+ * Slow down the motor
+ */
+void Aladim_MotorDriver::slowdownMotor()
+{
+    for (CurrentPWM; CurrentPWM > MinimumPWM; CurrentPWM--)
+    {
+
+        Serial.print("Komm ich überhautpt in den Loop");
+
+        // Write new value to output
+        analogWrite(LPWM_Output, CurrentPWM);
+
+        // Print
+        Serial.println((String) "Max rotation value: " + CurrentPWM);
+    }
 }

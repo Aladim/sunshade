@@ -9,7 +9,6 @@
 class Aladim_MotorDriver
 {
 public: // Declaration of functions: These are the "functions" exposed to the consumer of this library.
-
     // Constructor
     Aladim_MotorDriver(int rpwmPin, int lpwmPin);
 
@@ -26,4 +25,19 @@ private: // Only visible from within this class
     // Variables of the class
     int RPWM_Output; // Arduino PWM output pin > connect to IBT-2 pin 1 (RPWM)
     int LPWM_Output; // Arduino PWM output pin > connect to IBT-2 pin 2 (LPWM)
+
+    // Current rotation value
+    int CurrentPWM;
+
+    // Maximum rotation value
+    int MaximumPWM;
+
+    // Minimum rotation value
+    int MinimumPWM;
+
+    // Accelerate the motor
+    void accelerateMotor();
+
+    // Slow down the motor
+    void slowdownMotor();
 };
