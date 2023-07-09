@@ -66,9 +66,14 @@ void loop()
     case 0x18:                      // If button click 'ARROW UP' opens the sunschade
       sunshade.openSunshade();      // invoke openSunshde
                                     // Turn the motor clockwise (right)
-      for (int i = 0; i < 255; i++) // Increment current PWM value
+      for (int i = 100; i < 200; i++) // Increment current PWM value
       {
-        analogWrite(5, i); // Write new value to output
+
+        if (i > 100)
+        {
+          analogWrite(5, i); // Write new value to output
+        }
+
         // Print
         Serial.println((String) "Accelerate Motor: Direction of Rotation 'clockwise' PWM value: " + i);
 
@@ -77,17 +82,24 @@ void loop()
         {
           Serial.println((String) "Accelerate Motor was stop!");
           analogWrite(5, 0); // Write new value to output
-          IrReceiver.resume();
+          sunshade.stopSunshade();
+          //IrReceiver.resume();
+          delay(3000);
           break; // Exit the 'for' loop
         }
+        IrReceiver.resume();
       }
       break;
     case 0x52:                      // If button click 'ARROW DOWN' closes the sunschade
       sunshade.closeSunshade();     // invoke closeSunshade
                                     // Turn the motor counterclockwise (left)
-      for (int i = 0; i < 255; i++) // Increment current PWM value
+      for (int i = 100; i < 200; i++) // Increment current PWM value
       {
-        analogWrite(6, i); // Write new value to output
+        if (i > 100)
+        {
+          analogWrite(6, i); // Write new value to output
+        }
+
         // Print
         Serial.println((String) "Accelerate Motor: Direction of Rotation 'counterclockwise' PWM value: " + i);
 
@@ -96,9 +108,12 @@ void loop()
         {
           Serial.println((String) "Accelerate Motor was stop!");
           analogWrite(6, 0); // Write new value to output
-          IrReceiver.resume();
+          sunshade.stopSunshade();
+          // IrReceiver.resume();
+          delay(3000);
           break; // Exit the 'for' loop
         }
+        IrReceiver.resume();
       }
       break;
     case 0x16: // If button click 'ASTERIX' stops the motor
