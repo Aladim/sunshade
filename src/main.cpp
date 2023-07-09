@@ -2,7 +2,6 @@
 #include <Arduino.h>
 #define DECODE_NEC
 #include <IRremote.hpp>
-// #include <Aladim_LedController.h>
 #include <Aladim-Sunshade.h>
 
 /*
@@ -71,8 +70,8 @@ void loop()
       // invoke closeSunshade
       sunshade.closeSunshade();
     }
-    // If button click 'OK' stop the motor
-    else if (IrReceiver.decodedIRData.command == 0x1C)
+    // If button click '0' stop the motor
+    else if (IrReceiver.decodedIRData.command == 0x19)
     {
       // invoke stopMotor
       sunshade.stopSunshade();

@@ -12,34 +12,82 @@ Aladim_MotorDriver::Aladim_MotorDriver(int rpwmPin, int lpwmPin)
 
     CurrentPWM = 0;   // Current rotation value starts with '0'
     MaximumPWM = 255; // Maximum rotation value
-    MinimumPWM = 0; // Minimum rotation value
+    MinimumPWM = 0;   // Minimum rotation value
 }
 
 /*
- * Turn the motor clockwise (right)
+ * Turn the motor clockwise (right) or counterclockwise (left)
  */
-void Aladim_MotorDriver::motorClockwise()
+void Aladim_MotorDriver::driveMotor(int directionOfRotation)
 {
-    // Print
-    Serial.print("Turn the motor clocwise\n");
 
-    // Motor
-    analogWrite(LPWM_Output, 0);
-    accelerateMotor();
+    // Switch direction of rotation
+    switch (directionOfRotation)
+    {
+    case 1:
+        // Print
+        Serial.println((String) "Direction of Rotation: " + directionOfRotation + " Turn the motor clockwise.");
+
+        // Accelerate motor
+        analogWrite(LPWM_Output, 0);
+        accelerateMotor(RPWM_Output, directionOfRotation);
+
+        break;
+    case 2:
+        // Print
+        Serial.println((String) "Direction of Rotation: " + directionOfRotation + " Turn the motor clockwise.");
+
+        // Accelerate motor
+        analogWrite(RPWM_Output, 0);
+        accelerateMotor(LPWM_Output, directionOfRotation);
+
+        break;
+    default:
+        // Print
+        Serial.println((String) "Direction of Rotation: " + directionOfRotation + " Stop the motor.");
+
+        break; // Wird nicht benötigt, wenn Statement(s) vorhanden sind
+    }
+}
+
+/*
+ * Accelerate the motor
+ */
+void Aladim_MotorDriver::accelerateMotor(int PWM_Output, int directionOfRotation)
+{
+    // Increment current PWM value
+    for (int i = CurrentPWM; i < MaximumPWM; i++)
+    {
+        // Increase current PWM
+        CurrentPWM++;
+
+        // Write new value to output
+        analogWrite(PWM_Output, CurrentPWM);
+
+        // Print
+        Serial.println((String) "Accelerate Motor: Direction of Rotation: " + directionOfRotation + " PWM value: " + CurrentPWM);
+    }
+
+    driveMotor(PWM_Output, CurrentPWM, directionOfRotation);
 }
 
 /**
- * Turn the motor counterclockwise (left)
+ * Drive the motor
  */
-void Aladim_MotorDriver::mototCounterclockwise()
+void Aladim_MotorDriver::driveMotor(int pWM_Output, int currentPWM, int directionOfRotation)
 {
 
-    // Print
-    Serial.print("Turn the motor counterclocwise\n");
+    // Write new value to output
+    analogWrite(pWM_Output, currentPWM);
 
-    // Motor
-    analogWrite(RPWM_Output, 0);
-    slowdownMotor();
+    // Print
+    Serial.println((String) "Drive Motor: Direction of Rotation: " + directionOfRotation + " PWM value: " + currentPWM);
+
+    // Motor rotates for specific delay time
+    delay(10000);
+
+    // Stop the motor
+    motorStop();
 }
 
 /**
@@ -54,39 +102,4 @@ void Aladim_MotorDriver::motorStop()
     CurrentPWM = 0;
     analogWrite(LPWM_Output, 0);
     analogWrite(RPWM_Output, 0);
-}
-
-/*
- * Accelerate the motor
- */
-void Aladim_MotorDriver::accelerateMotor()
-{
-    // Increase current PWM value
-    for (CurrentPWM; CurrentPWM < MaximumPWM + 1; CurrentPWM++)
-    {
-
-        // Write new value to output
-        analogWrite(RPWM_Output, CurrentPWM);
-
-        // Print
-        Serial.println((String) "Max rotation value: " + CurrentPWM);
-    }
-}
-
-/*
- * Slow down the motor
- */
-void Aladim_MotorDriver::slowdownMotor()
-{
-    for (CurrentPWM; CurrentPWM > MinimumPWM; CurrentPWM--)
-    {
-
-        Serial.print("Komm ich überhautpt in den Loop");
-
-        // Write new value to output
-        analogWrite(LPWM_Output, CurrentPWM);
-
-        // Print
-        Serial.println((String) "Max rotation value: " + CurrentPWM);
-    }
 }

@@ -12,11 +12,8 @@ public: // Declaration of functions: These are the "functions" exposed to the co
     // Constructor
     Aladim_MotorDriver(int rpwmPin, int lpwmPin);
 
-    // Motor turn clockwise (right)
-    void motorClockwise();
-
-    // Motor turn counterclockwise (left)
-    void mototCounterclockwise();
+    // Drives the motor. The parameter directionOfRotation has the value range '1' or '2' and turns the motor 'clockwise' (right) or 'counterclockwise' (left)
+    void driveMotor(int directionOfRotation);
 
     // Motor stop
     void motorStop();
@@ -25,6 +22,8 @@ private: // Only visible from within this class
     // Variables of the class
     int RPWM_Output; // Arduino PWM output pin > connect to IBT-2 pin 1 (RPWM)
     int LPWM_Output; // Arduino PWM output pin > connect to IBT-2 pin 2 (LPWM)
+
+    int PWM_Output; // Arduino PWM output pin > dynamic
 
     // Current rotation value
     int CurrentPWM;
@@ -36,8 +35,8 @@ private: // Only visible from within this class
     int MinimumPWM;
 
     // Accelerate the motor
-    void accelerateMotor();
+    void accelerateMotor(int PWM_Output, int directionOfRotation);
 
-    // Slow down the motor
-    void slowdownMotor();
+    // Deive the motor
+    void driveMotor(int pWM_Output, int currentPWM, int directionOfRotation);
 };

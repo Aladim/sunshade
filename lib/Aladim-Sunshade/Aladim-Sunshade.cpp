@@ -4,13 +4,13 @@
 #include <Aladim_LedController.h>
 
 // Create LED object for open sunshade operation
-Aladim_LedController ledOpenSunshade(9);
+Aladim_LedController ledOpenSunshade(9); 
 
 // Create LED object for the close sunshade operation
 Aladim_LedController ledCloseSunshade(10);
 
 // Create LED object for the stop motor operation
-Aladim_LedController ledStopSunshade(11);
+Aladim_LedController ledStopSunshade(11); 
 
 // Create motot object
 Aladim_MotorDriver motorDriver(5, 6);
@@ -32,7 +32,7 @@ void Aladim_Sunshade::openSunshade()
     ledStopSunshade.turnOff();
 
     // Turn the motor clockwise (right)
-    motorDriver.motorClockwise();
+    motorDriver.driveMotor(1);
 }
 
 // Closes the sunshade
@@ -47,7 +47,7 @@ void Aladim_Sunshade::closeSunshade()
     ledStopSunshade.turnOff();
 
     // Turn the motor counterclockwise (left)
-    motorDriver.mototCounterclockwise();
+    motorDriver.driveMotor(2);
 }
 
 // Stops the motor
