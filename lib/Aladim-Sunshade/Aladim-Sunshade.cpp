@@ -1,19 +1,15 @@
 #include <Arduino.h>
 #include "Aladim-Sunshade.h"
-#include <Aladim-MotorDriver.h>
 #include <Aladim_LedController.h>
 
 // Create LED object for open sunshade operation
-Aladim_LedController ledOpenSunshade(9); 
+Aladim_LedController ledOpenSunshade(9);
 
 // Create LED object for the close sunshade operation
 Aladim_LedController ledCloseSunshade(10);
 
 // Create LED object for the stop motor operation
-Aladim_LedController ledStopSunshade(11); 
-
-// Create motot object
-Aladim_MotorDriver motorDriver(5, 6);
+Aladim_LedController ledStopSunshade(11);
 
 // Default Constructor
 Aladim_Sunshade::Aladim_Sunshade()
@@ -30,9 +26,6 @@ void Aladim_Sunshade::openSunshade()
     ledOpenSunshade.turnOn();
     ledCloseSunshade.turnOff();
     ledStopSunshade.turnOff();
-
-    // Turn the motor clockwise (right)
-    motorDriver.driveMotor(1);
 }
 
 // Closes the sunshade
@@ -45,9 +38,6 @@ void Aladim_Sunshade::closeSunshade()
     ledOpenSunshade.turnOff();
     ledCloseSunshade.turnOn();
     ledStopSunshade.turnOff();
-
-    // Turn the motor counterclockwise (left)
-    motorDriver.driveMotor(2);
 }
 
 // Stops the motor
@@ -60,9 +50,6 @@ void Aladim_Sunshade::stopSunshade()
     ledOpenSunshade.turnOff();
     ledCloseSunshade.turnOff();
     ledStopSunshade.turnOn();
-
-    // Stop the motor
-    motorDriver.motorStop();
 }
 
 // Turns on the warning light

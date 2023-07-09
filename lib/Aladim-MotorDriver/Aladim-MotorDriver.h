@@ -5,6 +5,9 @@
 #pragma once         // ensures that the library is only copied in ONCE into the skecth.
 #include <Arduino.h> // Inlude the Arduino lib.
 
+//#define DECODE_NEC
+//#include <IRremote.hpp>
+
 // Simple library class to controll the a dc motor via a h-bridge modul
 class Aladim_MotorDriver
 {
@@ -19,6 +22,10 @@ public: // Declaration of functions: These are the "functions" exposed to the co
     void motorStop();
 
 private: // Only visible from within this class
+
+
+    // int IR_RECEIVE_PIN; // IR reciver input pin  8
+
     // Variables of the class
     int RPWM_Output; // Arduino PWM output pin > connect to IBT-2 pin 1 (RPWM)
     int LPWM_Output; // Arduino PWM output pin > connect to IBT-2 pin 2 (LPWM)

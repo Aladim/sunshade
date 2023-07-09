@@ -3,14 +3,20 @@
 #define DECODE_NEC
 #include <IRremote.hpp>
 #include <Aladim-Sunshade.h>
+#include <Aladim-MotorDriver.h>
 
 /*
  * https://github.com/Arduino-IRremote/Arduino-IRremote/blob/master/examples/SimpleReceiver/SimpleReceiver.ino
  */
-int IR_RECEIVE_PIN = 8; // IR reciver input pin  8
+
+// IR reciver input pin  8
+int IR_RECEIVE_PIN = 8;
 
 // Create sunshade object
 Aladim_Sunshade sunshade;
+
+// Create motot object
+Aladim_MotorDriver motorDriver(5, 6);
 
 // setup
 void setup()
@@ -26,7 +32,7 @@ void setup()
 }
 
 /*
- * Main Loop
+ * The Main Loop
  */
 void loop()
 {
@@ -55,38 +61,36 @@ void loop()
     IrReceiver.resume();
 
     /*
-     * Finally, check the received data and perform actions according to the received command
+     * Switch for the revieved IrReceiver data
      */
+    switch (IrReceiver.decodedIRData.command)
+    {
+    case 0x18:                   // If button click 'ARROW UP' opens the sunschade
+      sunshade.openSunshade();   // invoke openSunshde
+      motorDriver.driveMotor(1); // Turn the motor clockwise (right)
+      break;
+    case 0x52:                   // If button click 'ARROW DOWN' closes the sunschade
+      sunshade.closeSunshade();  // invoke closeSunshade
+      motorDriver.driveMotor(2); // Turn the motor counterclockwise (left)
+      break;
+    case 0x19:                 // If button click '0' stop the motor
+      sunshade.stopSunshade(); // invoke stopMotor
+      motorDriver.motorStop(); // Stop the motor
+      break;
+    case 0x16:                   // If button click 'ASTERIX' turn on the warning light
+      sunshade.warningLightOn(); // Invoke warningLightOn
+      break;
+    case 0xD:                     // If button click 'HASHTAG' turn off the warning light
+      sunshade.warningLightOff(); // invoke warningLightOff
+      break;
+    default:
+      break;
+    }
 
-    // If button click 'ARROW UP' opens the sunschade
-    if (IrReceiver.decodedIRData.command == 0x18)
-    {
-      // invoke openSunshde
-      sunshade.openSunshade();
-    }
-    // If button click 'ARROW DOWN' closes the sunschade
-    else if (IrReceiver.decodedIRData.command == 0x52)
-    {
-      // invoke closeSunshade
-      sunshade.closeSunshade();
-    }
-    // If button click '0' stop the motor
-    else if (IrReceiver.decodedIRData.command == 0x19)
-    {
-      // invoke stopMotor
-      sunshade.stopSunshade();
-    }
-    // If button click 'ASTERIX' turn on the warning light
-    else if (IrReceiver.decodedIRData.command == 0x16)
-    {
-      // invoke warningLightOn
-      sunshade.warningLightOn();
-    }
-    // If button click 'HASHTAG' turn off the warning light
-    else if (IrReceiver.decodedIRData.command == 0xD)
-    {
-      // invoke warningLightOff
-      sunshade.warningLightOff();
-    }
+    /*
+     * !!!Important!!! Enable receiving of the next value,
+     * since receiving has stopped after the end of the current received data packet.
+     */
+    IrReceiver.resume();
   }
 }

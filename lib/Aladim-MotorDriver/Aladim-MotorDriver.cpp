@@ -4,6 +4,12 @@
 // Default Constructor
 Aladim_MotorDriver::Aladim_MotorDriver(int rpwmPin, int lpwmPin)
 {
+    // IR reciver input pin  8
+    // IR_RECEIVE_PIN = 8;
+
+    // Create IR receiver object
+    // IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
+
     RPWM_Output = rpwmPin; // Arduino PWM output > connect to IBT-2 pin 1 (RPWM)
     LPWM_Output = lpwmPin; // Arduino PWM output > connect to IBT-2 pin 2 (LPWM)
 
@@ -55,6 +61,9 @@ void Aladim_MotorDriver::driveMotor(int directionOfRotation)
  */
 void Aladim_MotorDriver::accelerateMotor(int PWM_Output, int directionOfRotation)
 {
+
+    // IrReceiver.resume();
+
     // Increment current PWM value
     for (int i = CurrentPWM; i < MaximumPWM; i++)
     {
@@ -66,6 +75,15 @@ void Aladim_MotorDriver::accelerateMotor(int PWM_Output, int directionOfRotation
 
         // Print
         Serial.println((String) "Accelerate Motor: Direction of Rotation: " + directionOfRotation + " PWM value: " + CurrentPWM);
+
+        /*if (IrReceiver.decode() && IrReceiver.decodedIRData.command == 0x19)
+        {
+            Serial.println((String) "Accelerate Motor was stop!");
+
+            IrReceiver.resume();
+            break; // Exit the 'for' loop
+        }
+        */
     }
 
     driveMotor(PWM_Output, CurrentPWM, directionOfRotation);
@@ -74,32 +92,32 @@ void Aladim_MotorDriver::accelerateMotor(int PWM_Output, int directionOfRotation
 /**
  * Drive the motor
  */
-void Aladim_MotorDriver::driveMotor(int pWM_Output, int currentPWM, int directionOfRotation)
-{
+        void Aladim_MotorDriver::driveMotor(int pWM_Output, int currentPWM, int directionOfRotation)
+        {
 
-    // Write new value to output
-    analogWrite(pWM_Output, currentPWM);
+            // Write new value to output
+            analogWrite(pWM_Output, currentPWM);
 
-    // Print
-    Serial.println((String) "Drive Motor: Direction of Rotation: " + directionOfRotation + " PWM value: " + currentPWM);
+            // Print
+            Serial.println((String) "Drive Motor: Direction of Rotation: " + directionOfRotation + " PWM value: " + currentPWM);
 
-    // Motor rotates for specific delay time
-    delay(10000);
+            // Motor rotates for specific delay time
+            delay(10000);
 
-    // Stop the motor
-    motorStop();
-}
+            // Stop the motor
+            motorStop();
+        }
 
-/**
- * Stop the motor
- */
-void Aladim_MotorDriver::motorStop()
-{
-    // Print
-    Serial.print("Stop the motor\n");
+        /**
+         * Stop the motor
+         */
+        void Aladim_MotorDriver::motorStop()
+        {
+            // Print
+            Serial.print("Stop the motor\n");
 
-    // Motor
-    CurrentPWM = 0;
-    analogWrite(LPWM_Output, 0);
-    analogWrite(RPWM_Output, 0);
-}
+            // Motor
+            CurrentPWM = 0;
+            analogWrite(LPWM_Output, 0);
+            analogWrite(RPWM_Output, 0);
+        }
