@@ -3,7 +3,6 @@
 #define DECODE_NEC
 #include <IRremote.hpp>
 #include <Aladim-Sunshade.h>
-#include <Aladim-MotorDriver.h>
 
 /*
  * https://github.com/Arduino-IRremote/Arduino-IRremote/blob/master/examples/SimpleReceiver/SimpleReceiver.ino
@@ -16,7 +15,7 @@ int IR_RECEIVE_PIN = 8;
 Aladim_Sunshade sunshade;
 
 // Create motot object
-Aladim_MotorDriver motorDriver(5, 6);
+// Aladim_MotorDriver motorDriver(5, 6);
 
 // setup
 void setup()
@@ -36,7 +35,6 @@ void setup()
  */
 void loop()
 {
-
   // If IR reciver
   if (IrReceiver.decode())
   {
@@ -65,19 +63,52 @@ void loop()
      */
     switch (IrReceiver.decodedIRData.command)
     {
-    case 0x18:                   // If button click 'ARROW UP' opens the sunschade
-      sunshade.openSunshade();   // invoke openSunshde
-      motorDriver.driveMotor(1); // Turn the motor clockwise (right)
+    case 0x18:                      // If button click 'ARROW UP' opens the sunschade
+      sunshade.openSunshade();      // invoke openSunshde
+                                    // Turn the motor clockwise (right)
+      for (int i = 0; i < 255; i++) // Increment current PWM value
+      {
+        analogWrite(5, i); // Write new value to output
+        // Print
+        Serial.println((String) "Accelerate Motor: Direction of Rotation 'clockwise' PWM value: " + i);
+
+        // If button click 'ASTERIX' stops the motor
+        if (IrReceiver.decode() && IrReceiver.decodedIRData.command == 0x16)
+        {
+          Serial.println((String) "Accelerate Motor was stop!");
+          analogWrite(5, 0); // Write new value to output
+          IrReceiver.resume();
+          break; // Exit the 'for' loop
+        }
+      }
       break;
-    case 0x52:                   // If button click 'ARROW DOWN' closes the sunschade
-      sunshade.closeSunshade();  // invoke closeSunshade
-      motorDriver.driveMotor(2); // Turn the motor counterclockwise (left)
+    case 0x52:                      // If button click 'ARROW DOWN' closes the sunschade
+      sunshade.closeSunshade();     // invoke closeSunshade
+                                    // Turn the motor counterclockwise (left)
+      for (int i = 0; i < 255; i++) // Increment current PWM value
+      {
+        analogWrite(6, i); // Write new value to output
+        // Print
+        Serial.println((String) "Accelerate Motor: Direction of Rotation 'counterclockwise' PWM value: " + i);
+
+        // If button click 'ASTERIX' stops the motor
+        if (IrReceiver.decode() && IrReceiver.decodedIRData.command == 0x16)
+        {
+          Serial.println((String) "Accelerate Motor was stop!");
+          analogWrite(6, 0); // Write new value to output
+          IrReceiver.resume();
+          break; // Exit the 'for' loop
+        }
+      }
       break;
-    case 0x19:                 // If button click '0' stop the motor
+    case 0x16: // If button click 'ASTERIX' stops the motor
+               // Print
+      Serial.print("Stop the motor\n");
       sunshade.stopSunshade(); // invoke stopMotor
-      motorDriver.motorStop(); // Stop the motor
+      analogWrite(5, 0);       // Write new value to output
+      analogWrite(6, 0);       // Write new value to output
       break;
-    case 0x16:                   // If button click 'ASTERIX' turn on the warning light
+    case 0x5A:                   // If button click 'ASTERIX' turn on the warning light
       sunshade.warningLightOn(); // Invoke warningLightOn
       break;
     case 0xD:                     // If button click 'HASHTAG' turn off the warning light
