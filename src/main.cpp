@@ -1,11 +1,17 @@
 // Include hardware
 #include <Arduino.h>
+#include <string.h>
+
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
 #define DECODE_NEC
 #include <IRremote.hpp>
 
 // Include libraries
 #include <Aladim-Sunshade.h>
 #include <Aladim-BuzzerController.h>
+#include <Aladim-LCDController.h>
 
 /*
  * https://github.com/Arduino-IRremote/Arduino-IRremote/blob/master/examples/SimpleReceiver/SimpleReceiver.ino
@@ -20,6 +26,9 @@ Aladim_Sunshade sunshade;
 
 // Create buzzer object
 Aladim_BuzzerController buzzer(12);
+
+// Create LCD object
+LiquidCrystal_I2C lcdDisplay = LiquidCrystal_I2C(0x27, 16, 2);
 
 // Define operation mode
 #define OperationMode 1
@@ -54,24 +63,65 @@ void startAcceleration(int pwmPin);
 // Stop Motor
 void stopMotor();
 
+// Display Text
+void displayMessage(String param_1, String param_2);
+
 // Define a output methode for messages
 #if OperationMode == 1
-#define message(param) Serial.print(param)
-#define messageln(param) Serial.println(param)
+#define debug(param) Serial.print(param)
+#define debugln(param) Serial.println(param)
 #else
-#define message(param)
-#define messageln(param)
+#define debug(param)
+#define debugln(param)
 #endif
+
+// Message: Just to know which program is running on my Arduino
+String strProgramStart_1 = "START 'SUNSHADE'";
+String strProgramStart_2 = "WAIT FOR EVENT";
+
+// String strProgramStart_1 = "HALLO 'LUTZ'";
+// String strProgramStart_2 = "ALTES HAUS :-)";
+
+// Message: STOP MOTOR
+String strStopMotor_1 = "MOTOR: STOP";
+String strStopMotor_2 = "WAIT FOR EVENT";
+
+// Message: Accelerate Motor was stop
+String strAccelerateStop_1 = "ACCELERATE: STOP";
+String strAccelerateStop_2 = "WAIT FOR EVENT";
+
+// Message: "Motor reached the maximum speed."
+String strMotorMaxSpeed_1 = "MOTOR: MAX SPEED";
+String strMotorMaxSpeed_2 = "PMW VALUE:";
+
+//
+// debugln((String) "Accelerate Motor: Direction of Rotation 'clockwise' PWM value: " + i);
+String strAccelerateMotor_1 = "MOTOR: ROTATE:";
+String strAccelerateMotor_2 = "PMW VALUE:";
+String strCw = "CW";
+String strCCw = "CCW";
+
+// Message: Received noise or an unknown (or not yet enabled) protocol
+String strUnknownProtocol_1 = "IRR: UNKNOWN";
+String strUnknownProtocol_2 = "PROTOCOL RECIVED";
 
 // setup
 void setup()
 {
+  // Initialize the LC Display
+  lcdDisplay.init();
+
+  // Turn on the backlight
+  lcdDisplay.backlight();
 
   // Start the serial monitor
   Serial.begin(9600);
 
+  // Debug Message - Just to know which program is running on my Arduino
+  debugln("START " __FILE__ " from " __DATE__ "Using library version " VERSION_IRREMOTE);
+
   // Message - Just to know which program is running on my Arduino
-  messageln(F("START " __FILE__ " from " __DATE__ "\r\nUsing library version " VERSION_IRREMOTE));
+  displayMessage(strProgramStart_1, strProgramStart_2);
 
   // Initialize the stop button pin input
   pinMode(stopButton, INPUT_PULLUP);
@@ -91,6 +141,7 @@ void setup()
  */
 void loop()
 {
+
   // If stop button has event
   if (digitalRead(stopButton) == LOW)
   {
@@ -123,14 +174,15 @@ void loop()
 
     if (IrReceiver.decodedIRData.protocol == UNKNOWN)
     {
-      // Message
-      messageln(F("Received noise or an unknown (or not yet enabled) protocol"));
+      // Display Messgae
+      displayMessage(strUnknownProtocol_1, strUnknownProtocol_2);
+
+      // Debug Message
+      debugln("Received noise or an unknown (or not yet enabled) protocol");
 
       // We have an unknown protocol here, print more info
       IrReceiver.printIRResultRawFormatted(&Serial, true);
     }
-
-    // Serial.println();
 
     /*
      * !!!Important!!! Enable receiving of the next value,
@@ -188,16 +240,21 @@ void loop()
   }
 }
 
-/*
- * Helper Methods
- */
+/***********************************************************************************
+ * Helper Methods ******************************************************************
+ **********************************************************************************/
 
-// Stop the motor
+/*
+ *Stop the motor
+ */
 void stopMotor()
 {
 
   // Message
-  messageln("Stop the motor\n");
+  debugln("Stop the Motor!");
+
+  // LCD Message
+  displayMessage(strStopMotor_1, strStopMotor_2);
 
   // Invoke stopMotor
   sunshade.stopSunshade();
@@ -212,11 +269,16 @@ void stopMotor()
   analogWrite(ccwPwmPin, 0);
 }
 
-// Stop Acceleration
+/*
+ *Stop Acceleration
+ */
 void stopAcceleration(int pwmPin)
 {
-  // Message
-  messageln((String) "Accelerate Motor was stop!");
+  // Debugg Message
+  debugln("Accelerate Motor was stop");
+
+  // LCD Message
+  displayMessage(strAccelerateStop_1, strAccelerateStop_2);
 
   // Invoke stopSunshade
   sunshade.stopSunshade();
@@ -230,20 +292,31 @@ void stopAcceleration(int pwmPin)
   // delay(3000);
 }
 
-// Start Acceleration
+/*
+ * Start Acceleration
+ */
 void startAcceleration(int pwmPin)
 {
+
+  // Temp Variable for rotation
+  String strTempRotation;
 
   // Sunshade Condition
   if (pwmPin == cwPwmPin)
   {
     // Invoke openSunshde
     sunshade.openSunshade();
+
+    // Set Rotation
+    strTempRotation = strCw;
   }
   else
   {
     // Invoke closeSunshade
     sunshade.closeSunshade();
+
+    // Set Rotation
+    strTempRotation = strCCw;
   }
 
   // Turn the motor clockwise (right)
@@ -258,8 +331,11 @@ void startAcceleration(int pwmPin)
       buzzer.toggle();
     }
 
-    // Message
-    messageln((String) "Accelerate Motor: Direction of Rotation 'clockwise' PWM value: " + i);
+    // Debug Message
+    debugln((String) "Accelerate Motor: Direction of Rotation '" + strTempRotation + "' PWM value: " + i);
+
+    // Display Message
+    displayMessage(strAccelerateMotor_1, String(strAccelerateMotor_2 + i));
 
     // If button click 'ASTERIX' stops the motor
     if (IrReceiver.decode() && IrReceiver.decodedIRData.command == 0x16 || digitalRead(stopButton) == LOW)
@@ -275,7 +351,36 @@ void startAcceleration(int pwmPin)
     // Message
     if (i == ppwMax)
     {
-      messageln((String) "Motor reached the maximum speed.");
+      // Debug Message
+      debugln("Motor reached the maximum speed.");
+
+      // Display Message
+      displayMessage(strMotorMaxSpeed_1, String(strMotorMaxSpeed_2 + i));
     }
   }
+}
+
+/*
+ *Display Text Message
+ */
+void displayMessage(String param_1, String param_2)
+{
+
+  lcdDisplay.clear();
+
+  lcdDisplay.setCursor(0, 0);
+  lcdDisplay.print(param_1);
+
+  if (param_2 != "")
+  {
+    lcdDisplay.setCursor(0, 1);
+    lcdDisplay.print(param_2);
+  }
+  else
+  {
+    lcdDisplay.setCursor(0, 1);
+    lcdDisplay.print(millis() / 1000);
+  }
+
+  delay(100);
 }
