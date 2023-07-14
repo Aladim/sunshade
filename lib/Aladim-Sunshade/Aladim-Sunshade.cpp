@@ -19,10 +19,7 @@ Aladim_Sunshade::Aladim_Sunshade()
 // Opens the sunshade
 void Aladim_Sunshade::openSunshade()
 {
-    // Print
-    Serial.print("open sunshade\n");
-
-    // LED messages
+    // LED switch
     ledOpenSunshade.turnOn();
     ledCloseSunshade.turnOff();
     ledStopSunshade.turnOff();
@@ -31,10 +28,7 @@ void Aladim_Sunshade::openSunshade()
 // Closes the sunshade
 void Aladim_Sunshade::closeSunshade()
 {
-    // Print
-    Serial.print("closing sunshade\n");
-
-    // LED messages
+    // LED switch
     ledOpenSunshade.turnOff();
     ledCloseSunshade.turnOn();
     ledStopSunshade.turnOff();
@@ -43,10 +37,7 @@ void Aladim_Sunshade::closeSunshade()
 // Stops the motor
 void Aladim_Sunshade::stopSunshade()
 {
-    // Print
-    Serial.print("stop sunshade\n");
-
-    // LED messages
+    // LED switch
     ledOpenSunshade.turnOff();
     ledCloseSunshade.turnOff();
     ledStopSunshade.turnOn();
@@ -55,13 +46,11 @@ void Aladim_Sunshade::stopSunshade()
 // Turns on the warning light
 void Aladim_Sunshade::warningLightOn()
 {
-    // Print
-    Serial.print("turn on the warning light\n");
+
 }
 
 // Turns off the warning light
 void Aladim_Sunshade::warningLightOff()
 {
-    // Print
-    Serial.print("turn off the warning light\n");
+
 }

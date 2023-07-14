@@ -17,7 +17,6 @@
     */
     void Aladim_LedController::toggle()
     {
-
         stateLed = !stateLed;
         digitalWrite(pinLed, stateLed);
     }
