@@ -3,6 +3,7 @@
 #define DECODE_NEC
 #include <IRremote.hpp>
 #include <Aladim-Sunshade.h>
+#include <Aladim-BuzzerController.h>
 // #include <LiquidCrystal.h>
 
 /*
@@ -15,6 +16,9 @@ int IR_RECEIVE_PIN = 8;
 
 // Create sunshade object
 Aladim_Sunshade sunshade;
+
+// Create buzzer object
+Aladim_BuzzerController buzzer(12);
 
 // Define operation mode
 #define OperationMode 1
@@ -235,6 +239,9 @@ void startAcceleration(int pwmPin)
     {
       // Write new value to output
       analogWrite(pwmPin, i);
+
+      // Buzzer on
+      buzzer.toggle();
     }
 
     // Message

@@ -4,7 +4,7 @@
  * ALT + SHIFT + F >> Formate Code
  */
 
-#pragma once         // ensures that the library is only copied in ONCE into the skecth.
+#pragma once         // eEnsures that the library is only copied in ONCE into the skecth.
 #include <Arduino.h> // Inlude the Arduino lib.
 
 // Simple library class to controll discrete LED´s.
