@@ -232,6 +232,7 @@ void stopAcceleration(int pwmPin)
 // Start Acceleration
 void startAcceleration(int pwmPin)
 {
+
   // Sunshade Condition
   if (pwmPin == cwPwmPin)
   {
