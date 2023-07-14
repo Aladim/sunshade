@@ -104,7 +104,7 @@ void loop()
     startAcceleration(cwPwmPin);
   }
 
-  // If open button has event
+  // If close button has event
   if (digitalRead(closeButton) == LOW)
   {
     // Invoke startAcceleration
@@ -146,9 +146,6 @@ void loop()
     // If button click 'ARROW UP' opens the sunschade
     case 0x18:
 
-      // Invoke openSunshde
-      sunshade.openSunshade();
-
       // Invoke startAcceleration
       startAcceleration(cwPwmPin);
 
@@ -156,9 +153,6 @@ void loop()
 
     // If button click 'ARROW DOWN' closes the sunschade
     case 0x52:
-
-      // Invoke closeSunshade
-      sunshade.closeSunshade();
 
       // Invoke startAcceleration
       startAcceleration(ccwPwmPin);
@@ -207,6 +201,9 @@ void stopMotor()
   // Invoke stopMotor
   sunshade.stopSunshade();
 
+  // Toggel Buzzer
+  buzzer.turnOff();
+
   // Write new value to output
   analogWrite(cwPwmPin, 0);
 
@@ -220,11 +217,14 @@ void stopAcceleration(int pwmPin)
   // Message
   messageln((String) "Accelerate Motor was stop!");
 
+  // Invoke stopSunshade
+  sunshade.stopSunshade();
+
   // Write new value to output
   analogWrite(ccwPwmPin, 0);
 
-  // Invoke stopSunshade
-  sunshade.stopSunshade();
+  // Toggel Buzzer
+  buzzer.turnOff();
 
   // delay(3000);
 }
@@ -232,6 +232,18 @@ void stopAcceleration(int pwmPin)
 // Start Acceleration
 void startAcceleration(int pwmPin)
 {
+  // Sunshade Condition
+  if (pwmPin == cwPwmPin)
+  {
+    // Invoke openSunshde
+    sunshade.openSunshade();
+  }
+  else
+  {
+    // Invoke closeSunshade
+    sunshade.closeSunshade();
+  }
+
   // Turn the motor clockwise (right)
   for (int i = ppwMin; i < ppwMax + 1; i++)
   {
@@ -240,7 +252,7 @@ void startAcceleration(int pwmPin)
       // Write new value to output
       analogWrite(pwmPin, i);
 
-      // Buzzer on
+      // Toggel Buzzer
       buzzer.toggle();
     }
 

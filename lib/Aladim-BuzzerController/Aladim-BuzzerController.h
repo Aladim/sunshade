@@ -14,7 +14,13 @@ public: // Declaration of functions: These are the "functions" exposed to the co
     Aladim_BuzzerController(int pPin);
 
     // Toggle Buzzer
-    void toggle();    
+    void toggle();
+
+    // Buzzer On
+    void turnOn();
+
+    // Buzzer Off
+    void turnOff();
 
 private: // Only visible from within this class
     // Variables of the class

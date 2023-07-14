@@ -20,3 +20,19 @@
         stateBuzzer = !stateBuzzer;
         digitalWrite(pinBuzzer, stateBuzzer);
     }
+
+    /**
+     * Turn LED explizit ON
+     */
+    void Aladim_BuzzerController::turnOn()
+    {
+        digitalWrite(pinBuzzer, HIGH);
+    }
+
+    /**
+     * Turn LED explizit OFF
+     */
+    void Aladim_BuzzerController::turnOff()
+    {
+        digitalWrite(pinBuzzer, LOW);
+    }
