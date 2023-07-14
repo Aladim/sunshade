@@ -19,8 +19,14 @@ Aladim_Sunshade sunshade;
 // Define operation mode
 #define OperationMode 1
 
-// Pin Number or the manual stop button
+// Pin Number for the manual stop button
 int stopButton = 7;
+
+// Pin Number for the manual open sunshade
+int openButton = 4;
+
+// Pin Number for the manual close sunshade
+int closeButton = 2;
 
 // Pin for clockwise PWM signal
 int cwPwmPin = 5;
@@ -28,13 +34,20 @@ int cwPwmPin = 5;
 // Pin for counterclockwise PWM signal
 int ccwPwmPin = 6;
 
+// Puls Power Modulation Minimum
+int ppwMin = 100;
+
+// Puls Power Modultion Maximum
+int ppwMax = 200;
+
 // Stop Acceleration
 void stopAcceleration(int pwmPin);
 
+// Stop Acceleration
+void startAcceleration(int pwmPin);
+
 // Stop Motor
 void stopMotor();
-
-//
 
 // Define a output methode for messages
 #if OperationMode == 1
@@ -54,8 +67,14 @@ void setup()
   // Message - Just to know which program is running on my Arduino
   messageln(F("START " __FILE__ " from " __DATE__ "\r\nUsing library version " VERSION_IRREMOTE));
 
-  // Initialize the stop button pin as a input:
+  // Initialize the stop button pin input
   pinMode(stopButton, INPUT_PULLUP);
+
+  // Initialize the open button pin input
+  pinMode(openButton, INPUT_PULLUP);
+
+  // Initialize the close button pin input
+  pinMode(closeButton, INPUT_PULLUP);
 
   // Create IR receiver object
   IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
@@ -72,6 +91,20 @@ void loop()
   {
     // Invoke stopMotor
     stopMotor();
+  }
+
+  // If open button has event
+  if (digitalRead(openButton) == LOW)
+  {
+    // Invoke startAcceleration
+    startAcceleration(cwPwmPin);
+  }
+
+  // If open button has event
+  if (digitalRead(closeButton) == LOW)
+  {
+    // Invoke startAcceleration
+    startAcceleration(ccwPwmPin);
   }
 
   // If IR reciver
@@ -112,32 +145,9 @@ void loop()
       // Invoke openSunshde
       sunshade.openSunshade();
 
-      // Turn the motor clockwise (right)
-      for (int i = 100; i < 200; i++)
-      {
-        if (i > 100)
-        {
-          // Write new value to output
-          analogWrite(cwPwmPin, i);
-        }
+      // Invoke startAcceleration
+      startAcceleration(cwPwmPin);
 
-        // Message
-        messageln((String) "Accelerate Motor: Direction of Rotation 'clockwise' PWM value: " + i);
-
-        // If button click 'ASTERIX' stops the motor
-        if (IrReceiver.decode() && IrReceiver.decodedIRData.command == 0x16 || digitalRead(stopButton) == LOW)
-        {
-          // Invoke Stop Acceleration
-          stopAcceleration(cwPwmPin);
-
-          // Exit the 'for' loop
-          break;
-        }
-        IrReceiver.resume();
-      }
-
-      // Message
-      messageln((String) "Motor reached the maximum speed.");
       break;
 
     // If button click 'ARROW DOWN' closes the sunschade
@@ -146,31 +156,9 @@ void loop()
       // Invoke closeSunshade
       sunshade.closeSunshade();
 
-      // Turn the motor counterclockwise (left), increment current PWM value
-      for (int i = 100; i < 200; i++)
-      {
-        if (i > 100)
-        {
-          // Write new value to output
-          analogWrite(ccwPwmPin, i);
-        }
+      // Invoke startAcceleration
+      startAcceleration(ccwPwmPin);
 
-        // Message
-        messageln((String) "Accelerate Motor: Direction of Rotation 'counterclockwise' PWM value: " + i);
-
-        // If button click 'ASTERIX' stops the motor
-        if (IrReceiver.decode() && IrReceiver.decodedIRData.command == 0x16 || digitalRead(stopButton) == LOW)
-        {
-          // Invoke Stop Acceleration
-          stopAcceleration(ccwPwmPin);
-
-          // Break loop
-          break;
-        }
-        IrReceiver.resume();
-      }
-      // Message
-      messageln((String) "Motor reached the maximum speed.");
       break;
 
     // If button click 'ASTERIX' stops the motor
@@ -235,4 +223,38 @@ void stopAcceleration(int pwmPin)
   sunshade.stopSunshade();
 
   // delay(3000);
+}
+
+// Start Acceleration
+void startAcceleration(int pwmPin)
+{
+  // Turn the motor clockwise (right)
+  for (int i = ppwMin; i < ppwMax + 1; i++)
+  {
+    if (i > ppwMin)
+    {
+      // Write new value to output
+      analogWrite(pwmPin, i);
+    }
+
+    // Message
+    messageln((String) "Accelerate Motor: Direction of Rotation 'clockwise' PWM value: " + i);
+
+    // If button click 'ASTERIX' stops the motor
+    if (IrReceiver.decode() && IrReceiver.decodedIRData.command == 0x16 || digitalRead(stopButton) == LOW)
+    {
+      // Invoke Stop Acceleration
+      stopAcceleration(pwmPin);
+
+      // Exit the 'for' loop
+      break;
+    }
+    IrReceiver.resume();
+
+    // Message
+    if (i == ppwMax)
+    {
+      messageln((String) "Motor reached the maximum speed.");
+    }
+  }
 }
