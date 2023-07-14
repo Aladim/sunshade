@@ -2,9 +2,10 @@
 #include <Arduino.h>
 #define DECODE_NEC
 #include <IRremote.hpp>
+
+// Include libraries
 #include <Aladim-Sunshade.h>
 #include <Aladim-BuzzerController.h>
-// #include <LiquidCrystal.h>
 
 /*
  * https://github.com/Arduino-IRremote/Arduino-IRremote/blob/master/examples/SimpleReceiver/SimpleReceiver.ino
@@ -65,6 +66,7 @@ void stopMotor();
 // setup
 void setup()
 {
+
   // Start the serial monitor
   Serial.begin(9600);
 
@@ -89,7 +91,6 @@ void setup()
  */
 void loop()
 {
-
   // If stop button has event
   if (digitalRead(stopButton) == LOW)
   {
