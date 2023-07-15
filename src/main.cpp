@@ -18,16 +18,16 @@
  * STOP using Serial.print in your Arduino code! THIS is better: https://www.youtube.com/watch?v=--KxxMaiwSE
  */
 
-// IR reciver input pin  8
+// IR reciver input pin 8 (S-to-8)
 int IR_RECEIVE_PIN = 8;
 
 // Create sunshade object
 Aladim_Sunshade sunshade;
 
-// Create buzzer object
+// Create buzzer object (S-to-12)
 Aladim_BuzzerController buzzer(12);
 
-// Create LCD object
+// Create LCD object (SCL-to-SLC, SLA-to-SLA)
 LiquidCrystal_I2C lcdDisplay = LiquidCrystal_I2C(0x27, 16, 2);
 
 // Define operation mode
@@ -42,10 +42,10 @@ int openButton = 4;
 // Pin Number for the manual close sunshade
 int closeButton = 2;
 
-// Pin for clockwise PWM signal
+// Pin for clockwise PWM signal (1-to-5)
 int cwPwmPin = 5;
 
-// Pin for counterclockwise PWM signal
+// Pin for counterclockwise PWM signal (2-to-6)
 int ccwPwmPin = 6;
 
 // Puls Power Modulation Minimum
@@ -86,10 +86,6 @@ String strProgramStart_2 = "WAIT FOR EVENT";
 String strStopMotor_1 = "MOTOR: STOP";
 String strStopMotor_2 = "WAIT FOR EVENT";
 
-// Message: Accelerate Motor was stop
-String strAccelerateStop_1 = "ACCELERATE: STOP";
-String strAccelerateStop_2 = "WAIT FOR EVENT";
-
 // Message: "Motor reached the maximum speed."
 String strMotorMaxSpeed_1 = "MOTOR: MAX SPEED";
 String strMotorMaxSpeed_2 = "PMW VALUE:";
@@ -108,6 +104,7 @@ String strUnknownProtocol_2 = "PROTOCOL RECIVED";
 // setup
 void setup()
 {
+
   // Initialize the LC Display
   lcdDisplay.init();
 
@@ -270,29 +267,6 @@ void stopMotor()
 }
 
 /*
- *Stop Acceleration
- */
-void stopAcceleration(int pwmPin)
-{
-  // Debugg Message
-  debugln("Accelerate Motor was stop");
-
-  // LCD Message
-  displayMessage(strAccelerateStop_1, strAccelerateStop_2);
-
-  // Invoke stopSunshade
-  sunshade.stopSunshade();
-
-  // Write new value to output
-  analogWrite(ccwPwmPin, 0);
-
-  // Toggel Buzzer
-  buzzer.turnOff();
-
-  // delay(3000);
-}
-
-/*
  * Start Acceleration
  */
 void startAcceleration(int pwmPin)
@@ -340,8 +314,8 @@ void startAcceleration(int pwmPin)
     // If button click 'ASTERIX' stops the motor
     if (IrReceiver.decode() && IrReceiver.decodedIRData.command == 0x16 || digitalRead(stopButton) == LOW)
     {
-      // Invoke Stop Acceleration
-      stopAcceleration(pwmPin);
+      // Invoke Stop Motor
+      stopMotor();
 
       // Exit the 'for' loop
       break;
