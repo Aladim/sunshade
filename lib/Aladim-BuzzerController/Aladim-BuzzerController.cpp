@@ -22,17 +22,28 @@ void Aladim_BuzzerController::toggle()
 }
 
 /**
- * Turn LED explizit ON
+ * Turn Buzzer ON
  */
 void Aladim_BuzzerController::turnOn()
 {
     digitalWrite(pinBuzzer, HIGH);
+    digitalWrite(pinBuzzer, HIGH);
 }
 
 /**
- * Turn LED explizit OFF
+ * Turn Buzzer OFF
  */
 void Aladim_BuzzerController::turnOff()
 {
+    digitalWrite(pinBuzzer, LOW);
+}
+
+/**
+ * Buzzer Beep
+ */
+void Aladim_BuzzerController::beep()
+{
+    digitalWrite(pinBuzzer, HIGH);
+    delay(500);
     digitalWrite(pinBuzzer, LOW);
 }

@@ -70,7 +70,7 @@ float scaleFactor = 0.100; // for 5A module = 185.0 // for 20A module = 100.0 //
 float current = 0.0;
 
 // Default set to 2000mA
-float maxCurrent = 1000.0;
+float maxCurrent = 1200.0;
 
 // Pin Number for the Current Sensor
 int currentSensorPin = 0;
@@ -283,6 +283,8 @@ void loop()
  */
 void stopMotor()
 {
+  // Buzzer Beep
+  buzzer.beep();
 
   // Message
   debugln("Stop the Motor!");
@@ -303,7 +305,7 @@ void stopMotor()
   sunshade.stopSunshade();
 
   // Toggel Buzzer
-  buzzer.turnOff();
+  // buzzer.turnOff();
 
   // Write new value to output
   analogWrite(cwPwmPin, 0);
@@ -317,6 +319,9 @@ void stopMotor()
  */
 void startAcceleration(int pwmPin)
 {
+
+  // Buzzer Beep
+  buzzer.beep();
 
   // Temp Variable for rotation
   String strTempRotation;
@@ -362,8 +367,6 @@ void startAcceleration(int pwmPin)
 
     // Debugging Message
     debugln((String) "Current Monitor Feedback: " + currentMonitorFeedback);
-
-    // delay(3000);
 
     // If button click 'ASTERIX' stops the motor
     if (IrReceiver.decode() && IrReceiver.decodedIRData.command == 0x16 || digitalRead(stopButton) == LOW || currentMonitorFeedback == 1)

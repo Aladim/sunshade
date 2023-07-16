@@ -22,6 +22,9 @@ public: // Declaration of functions: These are the "functions" exposed to the co
     // Buzzer Off
     void turnOff();
 
+    // Buzzer Beep
+    void beep();
+
 private: // Only visible from within this class
     // Variables of the class
     int pinBuzzer;    // Buzzer Pin
