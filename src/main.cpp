@@ -30,8 +30,8 @@ Aladim_BuzzerController buzzer(12);
 // Create LCD object (SCL-to-SLC, SLA-to-SLA)
 LiquidCrystal_I2C lcdDisplay = LiquidCrystal_I2C(0x27, 16, 2);
 
-// Define operation mode
-#define OperationMode 1
+// Define Debug Mode
+#define DebugMode 1
 
 // Pin Number for the manual stop button
 int stopButton = 7;
@@ -65,8 +65,7 @@ int zeroCurrentValue;
 
 float scaleFactor = 0.100; // for 5A module = 185.0 // for 20A module = 100.0 // for 30A module = 66.0
 
-// float voltage = 0.0;
-
+// Variable for curent
 float current = 0.0;
 
 // Default set to 2000mA
@@ -94,7 +93,7 @@ void displayMessage(String param_1, String param_2);
 int currentSensorMonitoring();
 
 // Define a output methode for messages
-#if OperationMode == 1
+#if DebugMode == 1
 #define debug(param) Serial.print(param)
 #define debugln(param) Serial.println(param)
 #else
