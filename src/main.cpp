@@ -51,8 +51,8 @@ int ccwPwmPin = 6;
 // Puls Power Modulation Minimum
 int ppwMin = 100;
 
-// Puls Power Modultion Maximum
-int ppwMax = 200;
+// Puls Power Modultion Maximum (Max: 255)
+int ppwMax = 240;
 
 // Stop Acceleration
 void stopAcceleration(int pwmPin);
