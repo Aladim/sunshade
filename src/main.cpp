@@ -60,7 +60,8 @@ int ppwMax = 240;
 int rawValue;
 
 // Value for analogRead(A0) should be 1024/2 = 512 if no current is floating
-const int zeroCurrentValue = 510;
+// const int zeroCurrentValue = 510;
+int zeroCurrentValue;
 
 float scaleFactor = 0.100; // for 5A module = 185.0 // for 20A module = 100.0 // for 30A module = 66.0
 
@@ -157,6 +158,9 @@ void setup()
 
   // Create IR receiver object
   IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
+
+  // Initialize Sero Current Value
+  zeroCurrentValue = analogRead(0);
 }
 
 /*
@@ -392,8 +396,14 @@ void startAcceleration(int pwmPin)
 int currentSensorMonitoring()
 {
 
+  // Debugging Message
+  // debugln((String) "Zero Current Value: " + zeroCurrentValue);
+
   // Read raw data from ADC
   rawValue = analogRead(0);
+
+  // Debugging Message
+  // debugln((String) "Analog Read Value: " + rawValue);
 
   // current = (rawValue - zeroCurrentValue) * 5.0 / 1.024 / 0.100;
   current = (rawValue - zeroCurrentValue) * 5.0 / 1.024 / scaleFactor;
@@ -407,12 +417,17 @@ int currentSensorMonitoring()
   // Stop the Motor if current is to high
   if (current >= maxCurrent)
   {
-    debugln((String) "Current to hight: " + current);
+    // Debugg Message
+    debugln((String) "Current Value to hight: " + current + " mA");
     return 1;
   }
   else
   {
-    // debugln("Current ok.");
+    // Debugg Message
+    debugln((String) "Current Value: " + current + "mA");
+
+    // delay(500);
+
     return 0;
   }
 }
