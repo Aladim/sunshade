@@ -48,11 +48,34 @@ int cwPwmPin = 5;
 // Pin for counterclockwise PWM signal (2-to-6)
 int ccwPwmPin = 6;
 
-// Puls Power Modulation Minimum
-int ppwMin = 100;
+// Puls Power Modulation Minimum (100)
+int ppwMin = 200;
 
 // Puls Power Modultion Maximum (Max: 255)
 int ppwMax = 240;
+
+// Measuring current using ACS712 - 5A, 20A and 30A modules
+
+// analog data read from sensor
+int rawValue;
+
+// Value for analogRead(A0) should be 1024/2 = 512 if no current is floating
+const int zeroCurrentValue = 510;
+
+float scaleFactor = 0.100; // for 5A module = 185.0 // for 20A module = 100.0 // for 30A module = 66.0
+
+// float voltage = 0.0;
+
+float current = 0.0;
+
+// Default set to 2000mA
+float maxCurrent = 1000.0;
+
+// Pin Number for the Current Sensor
+int currentSensorPin = 0;
+
+// Variable for feedback
+int currentMonitorFeedback = 0;
 
 // Stop Acceleration
 void stopAcceleration(int pwmPin);
@@ -65,6 +88,9 @@ void stopMotor();
 
 // Display Text
 void displayMessage(String param_1, String param_2);
+
+// Current Sensor Monitoring
+int currentSensorMonitoring();
 
 // Define a output methode for messages
 #if OperationMode == 1
@@ -85,6 +111,7 @@ String strProgramStart_2 = "WAIT FOR EVENT";
 // Message: STOP MOTOR
 String strStopMotor_1 = "MOTOR: STOP";
 String strStopMotor_2 = "WAIT FOR EVENT";
+String strStopMotor_3 = "MOTOR BLOCKED";
 
 // Message: "Motor reached the maximum speed."
 String strMotorMaxSpeed_1 = "MOTOR: MAX SPEED";
@@ -104,7 +131,6 @@ String strUnknownProtocol_2 = "PROTOCOL RECIVED";
 // setup
 void setup()
 {
-
   // Initialize the LC Display
   lcdDisplay.init();
 
@@ -138,6 +164,13 @@ void setup()
  */
 void loop()
 {
+
+  // Current Sensor Monitoring
+  if (currentSensorMonitoring() == 1)
+  {
+    // Invoke stopMotor
+    stopMotor();
+  }
 
   // If stop button has event
   if (digitalRead(stopButton) == LOW)
@@ -250,8 +283,17 @@ void stopMotor()
   // Message
   debugln("Stop the Motor!");
 
-  // LCD Message
-  displayMessage(strStopMotor_1, strStopMotor_2);
+  // If condition for Current Monitor Feedback
+  if (currentMonitorFeedback == 1)
+  {
+    // LCD Message
+    displayMessage(strStopMotor_1, strStopMotor_3);
+  }
+  else
+  {
+    // LCD Message
+    displayMessage(strStopMotor_1, strStopMotor_2);
+  }
 
   // Invoke stopMotor
   sunshade.stopSunshade();
@@ -302,7 +344,7 @@ void startAcceleration(int pwmPin)
       analogWrite(pwmPin, i);
 
       // Toggel Buzzer
-      buzzer.toggle();
+      // buzzer.toggle();
     }
 
     // Debug Message
@@ -311,8 +353,16 @@ void startAcceleration(int pwmPin)
     // Display Message
     displayMessage(strAccelerateMotor_1, String(strAccelerateMotor_2 + i));
 
+    // Current Sensor Monitoring
+    currentMonitorFeedback = currentSensorMonitoring();
+
+    // Debugging Message
+    debugln((String) "Current Monitor Feedback: " + currentMonitorFeedback);
+
+    // delay(3000);
+
     // If button click 'ASTERIX' stops the motor
-    if (IrReceiver.decode() && IrReceiver.decodedIRData.command == 0x16 || digitalRead(stopButton) == LOW)
+    if (IrReceiver.decode() && IrReceiver.decodedIRData.command == 0x16 || digitalRead(stopButton) == LOW || currentMonitorFeedback == 1)
     {
       // Invoke Stop Motor
       stopMotor();
@@ -331,6 +381,39 @@ void startAcceleration(int pwmPin)
       // Display Message
       displayMessage(strMotorMaxSpeed_1, String(strMotorMaxSpeed_2 + i));
     }
+  }
+}
+
+/*
+ * Current Sensor Monitoring
+ * https://wolles-elektronikkiste.de/acs712-stromsensor
+ */
+
+int currentSensorMonitoring()
+{
+
+  // Read raw data from ADC
+  rawValue = analogRead(0);
+
+  // current = (rawValue - zeroCurrentValue) * 5.0 / 1.024 / 0.100;
+  current = (rawValue - zeroCurrentValue) * 5.0 / 1.024 / scaleFactor;
+
+  // Convert current if value has negative sign
+  if (current < 0)
+  {
+    current *= -1.0;
+  }
+
+  // Stop the Motor if current is to high
+  if (current >= maxCurrent)
+  {
+    debugln((String) "Current to hight: " + current);
+    return 1;
+  }
+  else
+  {
+    // debugln("Current ok.");
+    return 0;
   }
 }
 
