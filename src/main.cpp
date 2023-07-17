@@ -69,7 +69,7 @@ float scaleFactor = 0.100; // for 5A module = 185.0 // for 20A module = 100.0 //
 float current = 0.0;
 
 // Default set to 2000mA
-float maxCurrent = 1200.0;
+float maxCurrent = 2000.0;
 
 // Pin Number for the Current Sensor
 int currentSensorPin = 0;
@@ -103,30 +103,30 @@ int currentSensorMonitoring();
 
 // Message: Just to know which program is running on my Arduino
 String strProgramStart_1 = "START 'SUNSHADE'";
-String strProgramStart_2 = "WAIT FOR EVENT";
-
-// String strProgramStart_1 = "HALLO 'LUTZ'";
-// String strProgramStart_2 = "ALTES HAUS :-)";
+String strProgramStart_2 = "PRESS A BUTTON";
 
 // Message: STOP MOTOR
 String strStopMotor_1 = "MOTOR: STOP";
-String strStopMotor_2 = "WAIT FOR EVENT";
+String strStopMotor_2 = "PRESS A BUTTON";
 String strStopMotor_3 = "MOTOR BLOCKED";
 
-// Message: "Motor reached the maximum speed."
+// Message: "Motor reached the maximum speed." (Pulse-width modulation)
 String strMotorMaxSpeed_1 = "MOTOR: MAX SPEED";
-String strMotorMaxSpeed_2 = "PMW VALUE:";
+String strMotorMaxSpeed_2 = "PWM VALUE:";
 
-//
-// debugln((String) "Accelerate Motor: Direction of Rotation 'clockwise' PWM value: " + i);
-String strAccelerateMotor_1 = "MOTOR: ROTATE:";
-String strAccelerateMotor_2 = "PMW VALUE:";
+// Message: Motor starts up (Pulse-width modulation)
+String strAccelerateMotor_1 = "MOTOR: STARTS UP";
+String strAccelerateMotor_2 = "PWM VALUE:";
 String strCw = "CW";
 String strCCw = "CCW";
 
 // Message: Received noise or an unknown (or not yet enabled) protocol
-String strUnknownProtocol_1 = "IRR: UNKNOWN";
-String strUnknownProtocol_2 = "PROTOCOL RECIVED";
+String strUnknownProtocol_1 = "IRR: ERROR";
+String strUnknownProtocol_2 = "UNKNOWN PROTOCOL";
+
+// Message: Button Tool Tip
+String strButtonToolTip_1 = "PRESS ARROW UP,";
+String strButtonToolTip_2 = "ARROW DOWN OR OK";
 
 // setup
 void setup()
@@ -245,23 +245,22 @@ void loop()
 
       break;
 
-    // If button click 'ASTERIX' stops the motor
-    case 0x16:
+    // If button click 'OK' stops the motor
+    case 0x1C:
+
+      // Invoke stopMotor
       stopMotor();
+
       break;
 
-    // If button click 'ASTERIX' turn on the warning light
-    case 0x5A:
-      // Invoke warningLightOn
-      sunshade.warningLightOn();
-      break;
-
-    // If button click 'HASHTAG' turn off the warning light
-    case 0xD:
-      // invoke warningLightOff
-      sunshade.warningLightOff();
-      break;
     default:
+
+      // Message
+      debugln("Stop the Motor!");
+
+      // LCD Message
+      displayMessage(strButtonToolTip_1, strButtonToolTip_2);
+
       break;
     }
 
@@ -302,9 +301,6 @@ void stopMotor()
 
   // Invoke stopMotor
   sunshade.stopSunshade();
-
-  // Toggel Buzzer
-  // buzzer.turnOff();
 
   // Write new value to output
   analogWrite(cwPwmPin, 0);
@@ -351,7 +347,6 @@ void startAcceleration(int pwmPin)
       // Write new value to output
       analogWrite(pwmPin, i);
 
-      // Toggel Buzzer
       // buzzer.toggle();
     }
 
@@ -367,8 +362,10 @@ void startAcceleration(int pwmPin)
     // Debugging Message
     debugln((String) "Current Monitor Feedback: " + currentMonitorFeedback);
 
-    // If button click 'ASTERIX' stops the motor
-    if (IrReceiver.decode() && IrReceiver.decodedIRData.command == 0x16 || digitalRead(stopButton) == LOW || currentMonitorFeedback == 1)
+    /*
+     * If button click 'OK' OR  stopButton == LOW OR currentMonitorFeedback == 1 then stops the motor
+     */
+    if (IrReceiver.decode() && IrReceiver.decodedIRData.command == 0x1C || digitalRead(stopButton) == LOW || currentMonitorFeedback == 1)
     {
       // Invoke Stop Motor
       stopMotor();
@@ -399,14 +396,15 @@ int currentSensorMonitoring()
 {
 
   // Debugging Message
-  // debugln((String) "Zero Current Value: " + zeroCurrentValue);
+  debugln((String) "Zero Current Value: " + zeroCurrentValue);
 
   // Read raw data from ADC
   rawValue = analogRead(0);
 
   // Debugging Message
-  // debugln((String) "Analog Read Value: " + rawValue);
+  debugln((String) "Analog Read Value: " + rawValue);
 
+  // Calculate the actual current value
   // current = (rawValue - zeroCurrentValue) * 5.0 / 1.024 / 0.100;
   current = (rawValue - zeroCurrentValue) * 5.0 / 1.024 / scaleFactor;
 
@@ -421,14 +419,13 @@ int currentSensorMonitoring()
   {
     // Debugg Message
     debugln((String) "Current Value to hight: " + current + " mA");
+
     return 1;
   }
   else
   {
     // Debugg Message
     debugln((String) "Current Value: " + current + "mA");
-
-    // delay(500);
 
     return 0;
   }
@@ -456,5 +453,5 @@ void displayMessage(String param_1, String param_2)
     lcdDisplay.print(millis() / 1000);
   }
 
-  delay(100);
+  delay(50);
 }
