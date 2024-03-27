@@ -1,6 +1,5 @@
 /*
-27.03.2024
-Add new Current sens monitor.
+Shift + Alt + F >> Formate Code
 */
 
 // Include hardware
@@ -65,13 +64,21 @@ int ppwMax = 240;
 int rawValue;
 
 // Value for analogRead(A0) should be 1024/2 = 512 if no current is floating
-// const int zeroCurrentValue = 510;
-int zeroCurrentValue;
+// const int motorZeroCurrentValue = 510;
+int motorZeroCurrentValue;
 
+// Value for analogRead(A0) should be 1024/2 = 512 if no current is floating
+// const int motorZeroCurrentValue = 510;
+int ledStripZeroCurrentValue;
+
+// Sensitivity ratior of the current senns module
 float scaleFactor = 0.100; // for 5A module = 185.0 // for 20A module = 100.0 // for 30A module = 66.0
 
 // Variable for curent
 float current = 0.0;
+
+// Default set to 500mA
+float maxCurrentLedStrip = 800.0;
 
 // Default set to 2000mA
 float maxCurrent = 2000.0;
@@ -80,7 +87,13 @@ float maxCurrent = 2000.0;
 int currentSensorPin = 0;
 
 // Variable for feedback
-int currentMonitorFeedback = 0;
+int motorCurrentMonitorFeedback = 0;
+
+// Motor has stoped
+int motorIsRunning = 0;
+
+// Variable for feedback
+int ledStripeCurrentMonitorFeedback = 0;
 
 // Stop Acceleration
 void stopAcceleration(int pwmPin);
@@ -91,11 +104,17 @@ void startAcceleration(int pwmPin);
 // Stop Motor
 void stopMotor();
 
+// LED is still on, Stop Motor
+void stopMotorLED();
+
 // Display Text
 void displayMessage(String param_1, String param_2);
 
+// LED Stripes Current Sensor Monitoring
+int ledStripCurrentSensorMonitoring();
+
 // Current Sensor Monitoring
-int currentSensorMonitoring();
+int motorCurrentSensorMonitoring();
 
 // Define a output methode for messages
 #if DebugMode == 1
@@ -163,18 +182,36 @@ void setup()
   // Create IR receiver object
   IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
 
-  // Initialize Sero Current Value
-  zeroCurrentValue = analogRead(0);
+  // Initialize LED Stripes Current Value
+  ledStripZeroCurrentValue = analogRead(1);
+
+  // Initialize Motor Current Value
+  motorZeroCurrentValue = analogRead(0);
 }
 
+/************************************************************************************
+ * ### The Main Loop ###
+ ************************************************************************************/
+#pragma region### loop ###
+
 /*
- * The Main Loop
+ * loop
  */
 void loop()
 {
 
-  // Current Sensor Monitoring
-  if (currentSensorMonitoring() == 1)
+  // Conditional invoke of the method Current Sensor Monitoring of the LED Stripes.
+  if (ledStripCurrentSensorMonitoring() == 1 && motorIsRunning == 1)
+  {
+    // Invoke stopMotorLED
+    stopMotorLED();
+  }
+
+  // Test sleep time
+  // delay(3000);
+
+  // Conditional invoke of the method Current Sensor Monitoring of the Motor.
+  if (motorCurrentSensorMonitoring() == 1)
   {
     // Invoke stopMotor
     stopMotor();
@@ -277,12 +314,46 @@ void loop()
   }
 }
 
+#pragma endregion
+
 /***********************************************************************************
- * Helper Methods ******************************************************************
+ * ### Helper Methods ###
  **********************************************************************************/
 
+#pragma region### LED Strip is still on ###
+
 /*
- *Stop the motor
+ * Stop the motor if the LED Strip are still on
+ */
+void stopMotorLED()
+{
+  // Buzzer Beep
+  buzzer.beep();
+
+  // Message
+  debugln("LED is still on, stop the Motor!");
+
+  displayMessage(strStopMotor_1, "TURN OF LEDS");
+
+  // Invoke stopMotor
+  sunshade.stopSunshade();
+
+  // Write new value to output
+  analogWrite(cwPwmPin, 0);
+
+  // Write new value to output
+  analogWrite(ccwPwmPin, 0);
+
+  // Write new vlaue
+  motorIsRunning = 0;
+}
+
+#pragma endregion
+
+#pragma region### Stop The Motor ###
+
+/*
+ * Stop the motor
  */
 void stopMotor()
 {
@@ -293,7 +364,7 @@ void stopMotor()
   debugln("Stop the Motor!");
 
   // If condition for Current Monitor Feedback
-  if (currentMonitorFeedback == 1)
+  if (motorCurrentMonitorFeedback == 1)
   {
     // LCD Message
     displayMessage(strStopMotor_1, strStopMotor_3);
@@ -312,7 +383,14 @@ void stopMotor()
 
   // Write new value to output
   analogWrite(ccwPwmPin, 0);
+
+  // Write new value
+  motorIsRunning = 0;
 }
+
+#pragma endregion
+
+#pragma region### Start Acceleration ###
 
 /*
  * Start Acceleration
@@ -322,6 +400,18 @@ void startAcceleration(int pwmPin)
 
   // Buzzer Beep
   buzzer.beep();
+
+  // Conditional invoke of the method Current Sensor Monitoring of the LED Stripes.
+  if (ledStripCurrentSensorMonitoring() == 1)
+  {
+    // Invoke stopMotorLED
+    stopMotorLED();
+
+    return;
+  }
+
+  // Write new value
+  motorIsRunning = 1;
 
   // Temp Variable for rotation
   String strTempRotation;
@@ -361,16 +451,16 @@ void startAcceleration(int pwmPin)
     // Display Message
     displayMessage(strAccelerateMotor_1, String(strAccelerateMotor_2 + i));
 
-    // Current Sensor Monitoring
-    currentMonitorFeedback = currentSensorMonitoring();
+    // Motor Current Sensor Monitoring
+    motorCurrentMonitorFeedback = motorCurrentSensorMonitoring();
 
     // Debugging Message
-    debugln((String) "Current Monitor Feedback: " + currentMonitorFeedback);
+    debugln((String) "Motor Current Monitor Feedback: " + motorCurrentMonitorFeedback);
 
     /*
-     * If button click 'OK' OR  stopButton == LOW OR currentMonitorFeedback == 1 then stops the motor
+     * If button click 'OK' OR  stopButton == LOW OR motorCurrentMonitorFeedback == 1 then stops the motor
      */
-    if (IrReceiver.decode() && IrReceiver.decodedIRData.command == 0x1C || digitalRead(stopButton) == LOW || currentMonitorFeedback == 1)
+    if (IrReceiver.decode() && IrReceiver.decodedIRData.command == 0x1C || digitalRead(stopButton) == LOW || motorCurrentMonitorFeedback == 1)
     {
       // Invoke Stop Motor
       stopMotor();
@@ -392,26 +482,78 @@ void startAcceleration(int pwmPin)
   }
 }
 
+#pragma endregion
+
+#pragma region### LED Stripes Current Sensor Monitoring ###
+
 /*
- * Current Sensor Monitoring
+ * LED Stripes Current Sensor Monitoring
  * https://wolles-elektronikkiste.de/acs712-stromsensor
  */
 
-int currentSensorMonitoring()
+int ledStripCurrentSensorMonitoring()
 {
 
   // Debugging Message
-  debugln((String) "Zero Current Value: " + zeroCurrentValue);
+  debugln((String) "LED Zero Current Value: " + ledStripZeroCurrentValue);
+
+  // Read raw data from ADC
+  rawValue = analogRead(1);
+
+  // Debugging Message
+  debugln((String) "LED Analog Read Value: " + rawValue);
+
+  // Calculate the actual current value
+  // current = (rawValue - ledStripZeroCurrentValue) * 5.0 / 1.024 / 0.100;
+  current = (rawValue - ledStripZeroCurrentValue) * 5.0 / 1.024 / scaleFactor;
+
+  // Convert current if value has negative sign
+  if (current < 0)
+  {
+    current *= -1.0;
+  }
+
+  // Stop the Motor if the LED Stripes current is higher then maxCurrentLedStrip
+  if (current >= maxCurrentLedStrip)
+  {
+    // Debugg Message
+    debugln((String) "LED Current Value is floating: " + current + " mA");
+
+    return 1;
+  }
+  else
+  {
+    // Debugg Message
+    debugln((String) "LED Current Value: " + current + "mA");
+
+    return 0;
+  }
+}
+
+#pragma endregion
+
+#pragma region### Motor Current Sensor Monitoring ###
+
+/*
+ * Motor Current Sensor Monitoring
+ * https://wolles-elektronikkiste.de/acs712-stromsensor
+ */
+
+int motorCurrentSensorMonitoring()
+{
+
+  // Debugging Message
+  debugln((String) "Motor Zero Current Value: " + motorZeroCurrentValue);
 
   // Read raw data from ADC
   rawValue = analogRead(0);
 
   // Debugging Message
-  debugln((String) "Analog Read Value: " + rawValue);
+  debugln((String) "Motor Analog Read Value: " + rawValue);
 
   // Calculate the actual current value
-  // current = (rawValue - zeroCurrentValue) * 5.0 / 1.024 / 0.100;
-  current = (rawValue - zeroCurrentValue) * 5.0 / 1.024 / scaleFactor;
+  // current = (rawValue - motorZeroCurrentValue) * 5.0 / 1.024 / 0.100;
+  current = (rawValue - motorZeroCurrentValue) * 5.0 / 1.024 / scaleFactor;
 
   // Convert current if value has negative sign
   if (current < 0)
@@ -423,18 +565,22 @@ int currentSensorMonitoring()
   if (current >= maxCurrent)
   {
     // Debugg Message
-    debugln((String) "Current Value to hight: " + current + " mA");
+    debugln((String) "Motor Current Value to hight: " + current + " mA");
 
     return 1;
   }
   else
   {
     // Debugg Message
-    debugln((String) "Current Value: " + current + "mA");
+    debugln((String) "Motor Current Value: " + current + "mA");
 
     return 0;
   }
 }
+
+#pragma endregion
+
+#pragma region### Display Test Messages ###
 
 /*
  *Display Text Message
@@ -460,3 +606,5 @@ void displayMessage(String param_1, String param_2)
 
   delay(50);
 }
+
+#pragma endregion
