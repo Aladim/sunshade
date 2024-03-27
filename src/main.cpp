@@ -1,3 +1,8 @@
+/*
+27.03.2024
+Add new Current sens monitor.
+*/
+
 // Include hardware
 #include <Arduino.h>
 #include <string.h>
