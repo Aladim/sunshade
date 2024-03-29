@@ -80,8 +80,8 @@ float current = 0.0;
 // Default set to 500mA
 float maxCurrentLedStrip = 800.0;
 
-// Default set to 2000mA
-float maxCurrent = 2000.0;
+// Default set to 2500mA
+float maxCurrent = 2500.0;
 
 // Pin Number for the Current Sensor
 int currentSensorPin = 0;
