@@ -1,6 +1,4 @@
-/*
-Shift + Alt + F >> Formate Code
-*/
+#pragma region### Include Libraries ###
 
 // Include hardware
 #include <Arduino.h>
@@ -11,12 +9,31 @@ Shift + Alt + F >> Formate Code
 
 // IR Sensor
 #define DECODE_NEC
-#include <IRremote.hpp>
+#include <IRremote.h>
 
 // Include libraries
 #include <Aladim-Sunshade.h>
 #include <Aladim-BuzzerController.h>
 #include <Aladim-LCDController.h>
+
+// WiFi
+#include <WiFiNINA.h>
+//#include <ArduinoOTA.h>
+
+// Declare the ArduinoOTA object
+// ArduinoOTAClass ArduinoOTA;
+#include <ArduinoOTA.h>
+
+#pragma endregion
+
+#pragma region### Variables ###
+
+// WiFi credentials
+const char *ssid = "MsWlanBoxSunshade"; // your network SSID (name)
+
+const char *password = "023145390925031973"; // your network password
+
+int status = WL_IDLE_STATUS; // the Wifi radio's status
 
 /*
  * https://github.com/Arduino-IRremote/Arduino-IRremote/blob/master/examples/SimpleReceiver/SimpleReceiver.ino
@@ -155,6 +172,9 @@ String strUnknownProtocol_2 = "UNKNOWN PROTOCOL";
 String strButtonToolTip_1 = "PRESS ARROW UP,";
 String strButtonToolTip_2 = "ARROW DOWN OR OK";
 
+#pragma endregion
+
+#pragma region### Setup ###
 
 // setup
 void setup()
@@ -169,7 +189,7 @@ void setup()
   Serial.begin(9600);
 
   // Debug Message - Just to know which program is running on my Arduino
-  debugln("START " __FILE__ " from " __DATE__ "Using library version " VERSION_IRREMOTE);
+  debugln("START " __FILE__ " from " __DATE__ " Using library version " VERSION_IRREMOTE);
 
   // Message - Just to know which program is running on my Arduino
   displayMessage(strProgramStart_1, strProgramStart_2);
@@ -191,19 +211,72 @@ void setup()
 
   // Initialize Motor Current Value
   motorZeroCurrentValue = analogRead(0);
+
+  // ***************************************************************
+  // ************* WiFi Connection *********************************
+  // ***************************************************************
+  // https://github.com/arduino-libraries/WiFiNINA/tree/master
+  // Ensure WiFi is connected
+  // check for the WiFi module:
+  if (WiFi.status() == WL_NO_MODULE)
+  {
+
+    Serial.println("Communication with WiFi module failed!");
+
+    displayMessage("WIFI: ERROR", "NO MODULE");
+
+    // don't continue
+    while (true)
+      ;
+  }
+
+  // Check the firmware version
+  String fv = WiFi.firmwareVersion();
+  if (fv < WIFI_FIRMWARE_LATEST_VERSION)
+  {
+    Serial.println("Please upgrade the firmware");
+
+    displayMessage("WIFI: ERROR", "UPGRADE FIRMWARE");
+  }
+
+  // attempt to connect to WiFi network:
+  while (status != WL_CONNECTED)
+  {
+
+    Serial.print("Attempting to connect to open SSID: ");
+
+    displayMessage("WIFI: CONNECTING", ssid);
+
+    Serial.println(ssid);
+
+    status = WiFi.begin(ssid, password);
+
+    // wait 10 seconds for connection:
+    delay(10000);
+  }
+
+  // you're connected now, so print out the data:
+  Serial.print("You're connected to the network");
+
+  displayMessage("WIFI: CONNECTED", ssid);
 }
 
-/************************************************************************************
- * ### The Main Loop ###
- ************************************************************************************/
-#pragma region### loop ###
+// *************************************************
+// OTA - Over The Air Updates
+// *************************************************
+
+// start the WiFi OTA library with internal (flash) based storage
+// ArduinoOTA.begin(WiFi.localIP(), "Arduino", "password", InternalStorage);
+
+#pragma endregion
+
+#pragma region### Main Loop ###
 
 /*
  * loop
  */
 void loop()
 {
-
 
   // Conditional invoke of the method Current Sensor Monitoring of the LED Stripes.
   if (ledStripCurrentSensorMonitoring() == 1 && motorIsRunning == 1)
@@ -318,13 +391,15 @@ void loop()
     IrReceiver.resume();
   }
 
+    // check for WiFi OTA updates
+    ArduinoOTA.poll();
 }
 
 #pragma endregion
 
-/***********************************************************************************
- * ### Helper Methods ###
- **********************************************************************************/
+// **********************************************************************************
+// ************* ### Helper Methods ### *********************************************
+// **********************************************************************************
 
 #pragma region### LED Strip is still on ###
 
@@ -587,7 +662,6 @@ int motorCurrentSensorMonitoring()
 #pragma endregion
 
 #pragma region### Display Test Messages ###
-
 /*
  *Display Text Message
  */
@@ -614,3 +688,5 @@ void displayMessage(String param_1, String param_2)
 }
 
 #pragma endregion
+
+// Format Selection (Ctrl+K Ctrl+F) - Format the selected text.
