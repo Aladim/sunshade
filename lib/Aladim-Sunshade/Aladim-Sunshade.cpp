@@ -3,7 +3,7 @@
 #include <Aladim_LedController.h>
 
 // Create LED object for open sunshade operation
-Aladim_LedController ledOpenSunshade(9);
+Aladim_LedController ledOpenSunshade(6);
 
 // Create LED object for the close sunshade operation
 Aladim_LedController ledCloseSunshade(10);

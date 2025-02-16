@@ -9,6 +9,7 @@ Shift + Alt + F >> Formate Code
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
+// IR Sensor
 #define DECODE_NEC
 #include <IRremote.hpp>
 
@@ -44,13 +45,14 @@ int stopButton = 7;
 int openButton = 4;
 
 // Pin Number for the manual close sunshade
-int closeButton = 2;
+int closeButton = 13;
 
 // Pin for clockwise PWM signal (1-to-5)
 int cwPwmPin = 5;
 
 // Pin for counterclockwise PWM signal (2-to-6)
-int ccwPwmPin = 6;
+// int ccwPwmPin = 6;
+int ccwPwmPin = 9;
 
 // Puls Power Modulation Minimum (100)
 int ppwMin = 200;
@@ -81,7 +83,8 @@ float current = 0.0;
 float maxCurrentLedStrip = 800.0;
 
 // Default set to 2500mA
-float maxCurrent = 2500.0;
+// float maxCurrent = 2500.0;
+float maxCurrent = 2100.0;
 
 // Pin Number for the Current Sensor
 int currentSensorPin = 0;
@@ -152,6 +155,7 @@ String strUnknownProtocol_2 = "UNKNOWN PROTOCOL";
 String strButtonToolTip_1 = "PRESS ARROW UP,";
 String strButtonToolTip_2 = "ARROW DOWN OR OK";
 
+
 // setup
 void setup()
 {
@@ -199,6 +203,7 @@ void setup()
  */
 void loop()
 {
+
 
   // Conditional invoke of the method Current Sensor Monitoring of the LED Stripes.
   if (ledStripCurrentSensorMonitoring() == 1 && motorIsRunning == 1)
@@ -312,6 +317,7 @@ void loop()
      */
     IrReceiver.resume();
   }
+
 }
 
 #pragma endregion
