@@ -1,5 +1,3 @@
-#pragma region### Include Libraries ###
-
 // Include hardware
 #include <Arduino.h>
 #include <string.h>
@@ -18,20 +16,14 @@
 
 // WiFi
 #include <WiFiNINA.h>
-//#include <ArduinoOTA.h>
-
-// Declare the ArduinoOTA object
-// ArduinoOTAClass ArduinoOTA;
 #include <ArduinoOTA.h>
-
-#pragma endregion
-
-#pragma region### Variables ###
-
+#include "arduino_secrets.h" 
 // WiFi credentials
-const char *ssid = "MsWlanBoxSunshade"; // your network SSID (name)
+// const char *ssid = "MsWlanBoxSunshade"; // your network SSID (name)
+// const char *password = "023145390925031973"; // your network password
 
-const char *password = "023145390925031973"; // your network password
+char ssid[] = SECRET_SSID;        // your network SSID (name)
+char password[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
 
 int status = WL_IDLE_STATUS; // the Wifi radio's status
 
@@ -172,11 +164,9 @@ String strUnknownProtocol_2 = "UNKNOWN PROTOCOL";
 String strButtonToolTip_1 = "PRESS ARROW UP,";
 String strButtonToolTip_2 = "ARROW DOWN OR OK";
 
-#pragma endregion
-
-#pragma region### Setup ###
-
-// setup
+// ***************************************************************
+// ************* Setup *******************************************  
+// ***************************************************************
 void setup()
 {
   // Initialize the LC Display
@@ -213,7 +203,7 @@ void setup()
   motorZeroCurrentValue = analogRead(0);
 
   // ***************************************************************
-  // ************* WiFi Connection *********************************
+  // ************* Create WiFi Connection **************************
   // ***************************************************************
   // https://github.com/arduino-libraries/WiFiNINA/tree/master
   // Ensure WiFi is connected
@@ -226,8 +216,7 @@ void setup()
     displayMessage("WIFI: ERROR", "NO MODULE");
 
     // don't continue
-    while (true)
-      ;
+    while (true);
   }
 
   // Check the firmware version
@@ -268,13 +257,10 @@ void setup()
 // start the WiFi OTA library with internal (flash) based storage
 // ArduinoOTA.begin(WiFi.localIP(), "Arduino", "password", InternalStorage);
 
-#pragma endregion
 
-#pragma region### Main Loop ###
-
-/*
- * loop
- */
+// ***************************************************************
+// ************* Loop ********************************************
+// ***************************************************************
 void loop()
 {
 
@@ -284,9 +270,6 @@ void loop()
     // Invoke stopMotorLED
     stopMotorLED();
   }
-
-  // Test sleep time
-  // delay(3000);
 
   // Conditional invoke of the method Current Sensor Monitoring of the Motor.
   if (motorCurrentSensorMonitoring() == 1)
@@ -395,17 +378,11 @@ void loop()
     ArduinoOTA.poll();
 }
 
-#pragma endregion
-
 // **********************************************************************************
 // ************* ### Helper Methods ### *********************************************
 // **********************************************************************************
 
-#pragma region### LED Strip is still on ###
-
-/*
- * Stop the motor if the LED Strip are still on
- */
+// ** Stop Motor Led **
 void stopMotorLED()
 {
   // Buzzer Beep
@@ -429,13 +406,7 @@ void stopMotorLED()
   motorIsRunning = 0;
 }
 
-#pragma endregion
-
-#pragma region### Stop The Motor ###
-
-/*
- * Stop the motor
- */
+ // ** Stop the motor **
 void stopMotor()
 {
   // Buzzer Beep
@@ -469,13 +440,7 @@ void stopMotor()
   motorIsRunning = 0;
 }
 
-#pragma endregion
-
-#pragma region### Start Acceleration ###
-
-/*
- * Start Acceleration
- */
+// ** Start Acceleration **
 void startAcceleration(int pwmPin)
 {
 
@@ -563,10 +528,6 @@ void startAcceleration(int pwmPin)
   }
 }
 
-#pragma endregion
-
-#pragma region### LED Stripes Current Sensor Monitoring ###
-
 /*
  * LED Stripes Current Sensor Monitoring
  * https://wolles-elektronikkiste.de/acs712-stromsensor
@@ -610,10 +571,6 @@ int ledStripCurrentSensorMonitoring()
     return 0;
   }
 }
-
-#pragma endregion
-
-#pragma region### Motor Current Sensor Monitoring ###
 
 /*
  * Motor Current Sensor Monitoring
@@ -659,9 +616,6 @@ int motorCurrentSensorMonitoring()
   }
 }
 
-#pragma endregion
-
-#pragma region### Display Test Messages ###
 /*
  *Display Text Message
  */
@@ -687,6 +641,6 @@ void displayMessage(String param_1, String param_2)
   delay(50);
 }
 
-#pragma endregion
+
 
 // Format Selection (Ctrl+K Ctrl+F) - Format the selected text.

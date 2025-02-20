@@ -1,0 +1,67 @@
+  // ***************************************************************
+  // ************* IR Remote Control *******************************
+  // ***************************************************************
+
+// If IR reciver
+  /* if (IrReceiver.decode())
+  {
+    // Print complete received data in one line
+    IrReceiver.printIRResultShort(&Serial);
+
+    // Print the statement required to send this data
+    IrReceiver.printIRSendUsage(&Serial);
+
+    if (IrReceiver.decodedIRData.protocol == UNKNOWN)
+    {
+      // Display Messgae
+      displayMessage(strUnknownProtocol_1, strUnknownProtocol_2);
+
+      // Debug Message
+      debugln("Received noise or an unknown (or not yet enabled) protocol");
+
+      // We have an unknown protocol here, print more info
+      IrReceiver.printIRResultRawFormatted(&Serial, true);
+    }
+    
+    IrReceiver.resume();
+
+    switch (IrReceiver.decodedIRData.command)
+    {
+
+    // If button click 'ARROW UP' opens the sunschade
+    case 0x18:
+
+      // Invoke startAcceleration
+      startAcceleration(cwPwmPin);
+
+      break;
+
+    // If button click 'ARROW DOWN' closes the sunschade
+    case 0x52:
+
+      // Invoke startAcceleration
+      startAcceleration(ccwPwmPin);
+
+      break;
+
+    // If button click 'OK' stops the motor
+    case 0x1C:
+
+      // Invoke stopMotor
+      stopMotor();
+
+      break;
+
+    default:
+
+      // Message
+      debugln("Stop the Motor!");
+
+      // LCD Message
+      displayMessage(strButtonToolTip_1, strButtonToolTip_2);
+
+      break;
+    }
+
+    IrReceiver.resume();
+  } */
