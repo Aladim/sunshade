@@ -1,3 +1,5 @@
+# https://stackoverflow.com/questions/3949804/force-overwrite-of-local-file-with-whats-in-origin-repo
+
 .pio
 .vscode/.browse.c_cpp.db*
 .vscode/c_cpp_properties.json
